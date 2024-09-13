@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>穿搭助理</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="header">
+  <div class="intro-text">
+    <h1>穿搭助理</h1>
+    <p>歡迎使用穿搭助理！本平台將幫助您挑選最適合的穿搭風格。請先登入以繼續。</p>
+    <p>我們提供個性化的建議和範例圖，幫助您找到最適合您的穿衣風格。無論是日常穿搭還是特殊場合，我們都能為您提供靈感和指導。</p>
+    <p>登入後，您可以上傳您的照片並獲得專業的穿搭建議。開始您的穿搭旅程吧！</p>
+  </div>
+</div>
+<div class="container">
+  <form id="loginForm">
+    <label for="loginUsername">帳戶:</label><br>
+    <input type="text" id="loginUsername" name="loginUsername" placeholder="請輸入您的E-MAIL或手機" required><br>
+    <label for="loginPassword">密碼:</label><br>
+    <input type="password" id="loginPassword" name="loginPassword" placeholder="請輸入您的密碼" required><br>
+    <div class="policy-text">
+      <p>隱私權政策: 我們非常重視您的隱私，所有上傳的照片僅用於穿搭建議，絕不會外洩。</p>
+      <p>使用條款: 使用本平台即表示您同意我們的隱私權政策和使用條款。</p>
+    </div>
+    <div class="checkbox-container">
+      <label>
+        <input type="checkbox" id="agree" onclick="toggleButton()">
+        我已閱讀並同意隱私權政策和使用條款
+      </label>
+    </div>
+    <button type="submit" id="loginButton" disabled>登入</button>
+  </form>
+  <div id="loginMessage"></div>
+  <div class="links">
+    <a href="forget_password.html">忘記密碼嗎?</a>  <a href="account.html">註冊新會員</a>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

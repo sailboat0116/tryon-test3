@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>會員註冊</h2>
+    <form id="accountForm">
+        <label for="registerUsername">創建帳戶:</label><br>
+        <input type="text" id="registerUsername" name="registerUsername" placeholder="請輸入您的E-MAIL或手機" required><br>
+        <label for="registerPassword">密碼:</label><br>
+        <input type="password" id="registerPassword" name="registerPassword" placeholder="請輸入您的密碼" required><br>
+        <button type="submit">註冊帳號</button>
+    </form>
+    <div id="registerMessage"></div>
+    <div class="links">
+        <a href="http://localhost:3000/">回登入</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('accountForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const account = document.getElementById('registerUsername').value;
+        const password = document.getElementById('registerPassword').value;
+
+        const res = await fetch('api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({account, password})
+        });
+        const data = await res.text();
+        document.getElementById('registerMessage').innerText = data;
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>照片預覽</title>
+    <style>
+        body {
+            background-color: #efdaa7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .preview-container {
+            text-align: center;
+        }
+        .preview-container img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .button-container button {
+            border: none;
+            background-color: #ADD8E6;
+            color: black;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover {
+            background-color: #e5a3ad;
+        }
+    </style>
+    <script>
+
+        function handleDisagree() {
+            window.location.href = 'example.html';
+        }
+
+        function handleAgree() {
+            // Redirect to the page with category buttons
+            window.location.href = 'category_selection.html';
+        }
+
+    </script>
+</head>
+<body>
+<div class="preview-container">
+    <h1>照片預覽(要有說明)</h1>
+    <img id="previewImage" src="public/tryon-image.jpg" alt="預覽照片">
+
+    <div class="button-container">
+        <button onclick="handleAgree()">滿意</button>
+        <button onclick="handleDisagree()">不滿意並重新上傳</button>
+    </div>
+</div>
+
+
+</body>
+</html>
