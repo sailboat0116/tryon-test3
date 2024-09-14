@@ -16,7 +16,8 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname);
+        const ext = path.extname(file.originalname);
+        cb(null, `tryon-people${ext}`);
     }
 });
 const upload = multer({ storage });
