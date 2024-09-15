@@ -178,7 +178,7 @@ app.post('/tryon', upload.single('image'), async (req, res) => {
                 const { status, tryon_img_url } = taskStatusResponse.data.data;
                 if (status === 'successed' && tryon_img_url) {
                     // Save the try-on image to a file
-                    const tryonImagePath = path.join(__dirname, 'public', 'tryon-image.jpg');
+                    const tryonImagePath = path.join(__dirname, 'public', 'occasion1-1.jpg');
                     const tryonImageBuffer = await axios.get(tryon_img_url, { responseType: 'arraybuffer' });
                     fs.writeFileSync(tryonImagePath, tryonImageBuffer.data);
 
@@ -187,7 +187,7 @@ app.post('/tryon', upload.single('image'), async (req, res) => {
                         success: true,
                         message: 'Image uploaded and task completed successfully',
                         tryonImgUrl: tryon_img_url,
-                        tryonImgDownloadUrl: `/tryon-image.jpg`
+                        tryonImgDownloadUrl: `/occasion1-1.jpg`
                     });
                     return;
                 } else if (status === 'failed') {

@@ -63,64 +63,52 @@
         .upload-button {
             margin-top: 10px;
         }
-        input[type="file"] {
-            display: none;
-        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const uploadButton1 = document.querySelector('#uploadButton1');
             const uploadButton2 = document.querySelector('#uploadButton2');
-            const fileInput1 = document.getElementById('fileInput1');
-            const fileInput2 = document.getElementById('fileInput2');
             const img1 = document.getElementById('uploadedImage1');
             const img2 = document.getElementById('uploadedImage2');
 
-            function handleFileSelect(event, imgElement) {
-                const file = event.target.files[0];
-                if (file) {
-                    const formData = new FormData();
-                    formData.append('image', file);
+            function uploadImage(fileName, imgElement) {
+                fetch(fileName)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const formData = new FormData();
+                        formData.append('image', blob, fileName);
 
-                    fetch('http://localhost:3001/tryon', { // 修改URL為你的伺服器URL
-                        method: 'POST',
-                        body: formData
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('圖片上傳成功！');
-                                console.log('回應資料:', data); // 顯示返回的資料
-                                if (data.tryonImgUrl) {
-                                    imgElement.src = data.tryonImgUrl; // 將返回的圖片URL設置到對應的圖片元素
-                                } else {
-                                    alert('未能獲取圖片 URL');
-                                }
-                            } else {
-                                alert('圖片上傳失敗，請重試。');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('錯誤:', error);
-                            alert('發生錯誤，請重試。');
+                        return fetch('http://localhost:3001/tryon', {  // 替換為你的伺服器URL
+                            method: 'POST',
+                            body: formData
                         });
-                }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('圖片上傳成功！');
+                            console.log('回應資料:', data);
+                            if (data.tryonImgUrl) {
+                                imgElement.src = data.tryonImgUrl;  // 將返回的圖片URL設置到對應的圖片元素
+                            } else {
+                                alert('未能獲取圖片 URL');
+                            }
+                        } else {
+                            alert('圖片上傳失敗，請重試。');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('錯誤:', error);
+                        alert('發生錯誤，請重試。');
+                    });
             }
 
             uploadButton1.addEventListener('click', function() {
-                fileInput1.click();
+                uploadImage('uploads/aaa.png', img1);  // 替換為 john1.jpg 的實際路徑
             });
 
             uploadButton2.addEventListener('click', function() {
-                fileInput2.click();
-            });
-
-            fileInput1.addEventListener('change', function(event) {
-                handleFileSelect(event, img1);
-            });
-
-            fileInput2.addEventListener('change', function(event) {
-                handleFileSelect(event, img2);
+                uploadImage('uploads/a.png', img2);  // 替換為 john1.jpg 的實際路徑
             });
         });
     </script>
@@ -135,7 +123,6 @@
         <div class="upload-button">
             <button id="uploadButton1">上傳男生範例圖</button>
         </div>
-        <input type="file" id="fileInput1" accept="image/*">
         <div class="quiz-options">
             <button>背景為黑色</button>
         </div>
@@ -150,7 +137,6 @@
         <div class="upload-button">
             <button id="uploadButton2">上傳女生範例圖</button>
         </div>
-        <input type="file" id="fileInput2" accept="image/*">
         <div class="quiz-options">
             <button>穿著短褲與背心</button>
         </div>
