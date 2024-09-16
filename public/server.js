@@ -9,206 +9,163 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Set up multer for file uploads
-const storage = multer.diskStorage({
+// 設置 multer 用於文件上傳到磁盤
+const diskStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
-        cb(null, `tryon-people${ext}`);
+        cb(null, `${file.fieldname}-${Date.now()}${ext}`);
     }
 });
-const upload = multer({ storage });
+const uploadDisk = multer({ storage: diskStorage });
 
-// Serve static files (like HTML, CSS, JS)
+// 設置 multer 用於文件上傳到內存
+const memoryStorage = multer.memoryStorage();
+const uploadMemory = multer({ storage: memoryStorage });
+
+// 提供靜態文件
 app.use(express.static('public'));
 
-// Handle file upload
-app.post('/upload', upload.single('image'), async (req, res) => {
+// API 設置
+const API_URL = 'https://heybeauty.ai/api';
+const API_KEY = 'hb-PMAGG0sE0jyut4T9b31c9KoEA1yPgNfW';
+const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${API_KEY}`
+};
+
+// 輔助函數：創建任務
+async function createTask(user_img_name, cloth_img_name) {
+    const response = await axios.post(`${API_URL}/create-task`, {
+        user_img_name,
+        cloth_img_name,
+        category: "4",
+        caption: "test"
+    }, { headers });
+
+    if (response.data.code !== 0) {
+        throw new Error('獲取上傳鏈接失敗');
+    }
+
+    return response.data.data;
+}
+
+// 輔助函數：提交任務
+async function submitTask(task_uuid) {
+    const response = await axios.post(`${API_URL}/submit-task`, { task_uuid }, { headers });
+
+    if (response.data.code !== 0) {
+        throw new Error('提交任務失敗');
+    }
+}
+
+// 輔助函數：輪詢任務狀態
+async function pollTaskStatus(task_uuid) {
+    for (let i = 0; i < 20; i++) {
+        await new Promise(resolve => setTimeout(resolve, 20000));  // 睡眠 20 秒
+        const response = await axios.post(`${API_URL}/get-task-info`, { task_uuid }, { headers });
+        console.log('輪詢任務狀態:', response.data);
+
+        if (response.data.code === 0) {
+            const { status, tryon_img_url } = response.data.data;
+            if (status === 'successed' && tryon_img_url) {
+                return tryon_img_url;
+            } else if (status === 'failed') {
+                throw new Error('任務失敗');
+            }
+        }
+    }
+    throw new Error('任務超時');
+}
+
+// /upload 路由
+app.post('/upload', uploadDisk.single('image'), async (req, res) => {
     if (!req.file) {
-        return res.status(400).json({ success: false, message: 'No file uploaded' });
+        return res.status(400).json({ success: false, message: '沒有上傳文件' });
     }
 
     try {
         const imagePath = path.join(__dirname, req.file.path);
-        const apiUrl = 'https://heybeauty.ai/api/create-task';
-        const apiKey = 'hb-PMAGG0sE0jyut4T9b31c9KoEA1yPgNfW';
+        const tryonPeoplePath = path.join(__dirname, 'uploads', 'tryon-people.jpg');
 
-        const params = {
-            user_img_name: req.file.originalname,
-            cloth_img_name: 'john1.jpg',
-            category: "4",
-            caption: "test"
-        };
+        // 將上傳的圖片保存為 tryon-people.jpg
+        fs.copyFileSync(imagePath, tryonPeoplePath);
 
-        const headers = {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-        };
+        const { uuid, user_img_url, cloth_img_url } = await createTask(req.file.originalname, 'john1.jpg');
 
-        const response = await axios.post(apiUrl, params, { headers });
-        if (response.data.code !== 0) {
-            throw new Error('Failed to get upload link');
-        }
-
-        const { uuid, user_img_url, cloth_img_url } = response.data.data;
-
-        // Upload images
-        await axios.put(user_img_url, fs.createReadStream(imagePath), {
+        // 上傳圖片
+        await axios.put(user_img_url, fs.createReadStream(tryonPeoplePath), {
             headers: { 'Content-Type': 'image/jpeg' }
         });
         await axios.put(cloth_img_url, fs.createReadStream(path.join(__dirname, 'uploads', 'john1.jpg')), {
             headers: { 'Content-Type': 'image/jpeg' }
         });
 
-        // Submit the task
-        const submitTaskUrl = 'https://heybeauty.ai/api/submit-task';
-        const submitResponse = await axios.post(submitTaskUrl, { task_uuid: uuid }, { headers });
+        await submitTask(uuid);
 
-        if (submitResponse.data.code !== 0) {
-            throw new Error('Failed to submit task');
-        }
+        const tryon_img_url = await pollTaskStatus(uuid);
 
-        // Poll task status
-        const statusUrl = 'https://heybeauty.ai/api/get-task-info';
-        let taskStatusResponse;
+        // 保存 try-on 圖片到文件
+        const tryonImagePath = path.join(__dirname, 'public', 'tryon-image.jpg');
+        const tryonImageResponse = await axios.get(tryon_img_url, { responseType: 'arraybuffer' });
+        fs.writeFileSync(tryonImagePath, tryonImageResponse.data);
 
-        for (let i = 0; i < 20; i++) {
-            await new Promise(resolve => setTimeout(resolve, 20000));  // Sleep for 18 seconds
-            taskStatusResponse = await axios.post(statusUrl, { task_uuid: uuid }, { headers });
-            console.log('Polling task status:', taskStatusResponse.data);
-
-            if (taskStatusResponse.data.code === 0) {
-                const { status, tryon_img_url } = taskStatusResponse.data.data;
-                if (status === 'successed' && tryon_img_url) {
-                    // Save the try-on image to a file
-                    const tryonImagePath = path.join(__dirname, 'public', 'tryon-image.jpg');
-                    const tryonImageBuffer = await axios.get(tryon_img_url, { responseType: 'arraybuffer' });
-                    fs.writeFileSync(tryonImagePath, tryonImageBuffer.data);
-
-                    // Return the try-on image URL and a download link
-                    res.json({
-                        success: true,
-                        message: 'Image uploaded and task completed successfully',
-                        tryonImgUrl: tryon_img_url,
-                        tryonImgDownloadUrl: `/tryon-image.jpg`
-                    });
-                    return;
-                } else if (status === 'failed') {
-                    res.status(500).json({ success: false, message: 'Task failed or encountered an error' });
-                    return;
-                }
-            } else {
-                res.status(500).json({ success: false, message: 'Failed to get task status' });
-                return;
-            }
-        }
-
-        // If after 30 checks, the task is still not completed
-        res.status(500).json({ success: false, message: 'Task failed or timeout' });
+        res.json({
+            success: true,
+            message: '圖片上傳並處理成功',
+            tryonImgUrl: tryon_img_url,
+            tryonImgDownloadUrl: '/tryon-image.jpg'
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Failed to upload and process image' });
+        res.status(500).json({ success: false, message: '上傳和處理圖片失敗' });
     }
 });
 
-// Serve the try-on image
-app.get('/tryon-image.jpg', (req, res) => {
-    const tryonImagePath = path.join(__dirname, 'public', 'tryon-image.jpg');
-    res.sendFile(tryonImagePath);
-});
-
-app.post('/tryon', upload.single('image'), async (req, res) => {
+// /tryon 路由
+app.post('/tryon', uploadMemory.single('image'), async (req, res) => {
     if (!req.file) {
-        return res.status(400).json({ success: false, message: 'No file uploaded' });
+        return res.status(400).json({ success: false, message: '沒有上傳文件' });
     }
 
     try {
-        const imagePath = path.join(__dirname, req.file.path);
-        const apiUrl = 'https://heybeauty.ai/api/create-task';
-        const apiKey = 'hb-PMAGG0sE0jyut4T9b31c9KoEA1yPgNfW';
+        const { uuid, user_img_url, cloth_img_url } = await createTask('tryon-people.jpg', req.file.originalname);
 
-        const params = {
-            user_img_name: 'tryon-people.jpg',
-            cloth_img_name: req.file.originalname,
-            category: "4",
-            caption: "test"
-        };
-
-        const headers = {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-        };
-
-        const response = await axios.post(apiUrl, params, { headers });
-        if (response.data.code !== 0) {
-            throw new Error('Failed to get upload link');
-        }
-
-        const { uuid, user_img_url, cloth_img_url } = response.data.data;
-
-        // Upload images
-        await axios.put(cloth_img_url, fs.createReadStream(imagePath), {
+        // 上傳圖片
+        await axios.put(cloth_img_url, req.file.buffer, {
             headers: { 'Content-Type': 'image/jpeg' }
         });
         await axios.put(user_img_url, fs.createReadStream(path.join(__dirname, 'uploads', 'tryon-people.jpg')), {
             headers: { 'Content-Type': 'image/jpeg' }
         });
 
-        // Submit the task
-        const submitTaskUrl = 'https://heybeauty.ai/api/submit-task';
-        const submitResponse = await axios.post(submitTaskUrl, { task_uuid: uuid }, { headers });
+        await submitTask(uuid);
 
-        if (submitResponse.data.code !== 0) {
-            throw new Error('Failed to submit task');
-        }
+        const tryon_img_url = await pollTaskStatus(uuid);
 
-        // Poll task status
-        const statusUrl = 'https://heybeauty.ai/api/get-task-info';
-        let taskStatusResponse;
+        // 保存 try-on 圖片到文件
+        const tryonImagePath = path.join(__dirname, 'public', 'occasion1-1.jpg');
+        const tryonImageResponse = await axios.get(tryon_img_url, { responseType: 'arraybuffer' });
+        fs.writeFileSync(tryonImagePath, tryonImageResponse.data);
 
-        for (let i = 0; i < 20; i++) {
-            await new Promise(resolve => setTimeout(resolve, 20000));  // Sleep for 18 seconds
-            taskStatusResponse = await axios.post(statusUrl, { task_uuid: uuid }, { headers });
-            console.log('Polling task status:', taskStatusResponse.data);
-
-            if (taskStatusResponse.data.code === 0) {
-                const { status, tryon_img_url } = taskStatusResponse.data.data;
-                if (status === 'successed' && tryon_img_url) {
-                    // Save the try-on image to a file
-                    const tryonImagePath = path.join(__dirname, 'public', 'occasion1-1.jpg');
-                    const tryonImageBuffer = await axios.get(tryon_img_url, { responseType: 'arraybuffer' });
-                    fs.writeFileSync(tryonImagePath, tryonImageBuffer.data);
-
-                    // Return the try-on image URL and a download link
-                    res.json({
-                        success: true,
-                        message: 'Image uploaded and task completed successfully',
-                        tryonImgUrl: tryon_img_url,
-                        tryonImgDownloadUrl: `/occasion1-1.jpg`
-                    });
-                    return;
-                } else if (status === 'failed') {
-                    res.status(500).json({ success: false, message: 'Task failed or encountered an error' });
-                    return;
-                }
-            } else {
-                res.status(500).json({ success: false, message: 'Failed to get task status' });
-                return;
-            }
-        }
-
-        // If after 30 checks, the task is still not completed
-        res.status(500).json({ success: false, message: 'Task failed or timeout' });
+        res.json({
+            success: true,
+            message: '圖片處理成功',
+            tryonImgUrl: tryon_img_url,
+            tryonImgDownloadUrl: '/occasion1-1.jpg'
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Failed to upload and process image' });
+        res.status(500).json({ success: false, message: '處理 tryon 請求失敗' });
     }
 });
 
-// Start the server
+// 啟動伺服器
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`伺服器運行在 http://localhost:${PORT}`);
 });
