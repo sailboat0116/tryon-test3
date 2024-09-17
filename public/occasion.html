@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>穿搭助理 - 選擇題</title>
+    <title>場合_選擇題</title>
     <style>
         body {
             background-color: #efdaa7;
@@ -63,6 +63,16 @@
         .upload-button {
             margin-top: 10px;
         }
+        .start-button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: #a5a58d;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -115,16 +125,16 @@
 </head>
 <body>
 <div class="image-container">
-    <h1>穿搭助理 - 選擇題</h1>
+    <h1>場合-選擇題1</h1>
 </div>
 <div class="container">
     <div class="image-container">
-        <img id="uploadedImage1" class="image-placeholder" src="" alt="請上傳男生範例圖" />
+        <img id="uploadedImage1" class="image-placeholder" />
         <div class="upload-button">
-            <button id="uploadButton1">上傳男生範例圖</button>
+            <button id="uploadButton1">產生範例圖</button>
         </div>
         <div class="quiz-options">
-            <button>背景為黑色</button>
+            <button>左邊</button>
         </div>
     </div>
 
@@ -133,14 +143,15 @@
     </div>
 
     <div class="image-container">
-        <img id="uploadedImage2" class="image-placeholder" src="" alt="請上傳女生範例圖" />
+        <img id="uploadedImage2" class="image-placeholder"/>
         <div class="upload-button">
-            <button id="uploadButton2">圖一</button>
+            <button id="uploadButton2">產生範例圖</button>
         </div>
         <div class="quiz-options">
-            <button>圖一</button>
+            <button>右邊</button>
         </div>
     </div>
 </div>
+<button class="start-button" onclick="window.location.href='/type_quiz2.html'">前往題目二</button>
 </body>
 </html>
