@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>風格_選擇題</title>
+  <style>
+    body {
+      background-color: #efdaa7;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+    .container {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+    }
+    .image-container {
+      flex: 1;
+      margin: 0 10px;
+      text-align: center;
+    }
+    .image-container img {
+      max-width: 100%;
+      height: 400px;
+      border-radius: 10px;
+    }
+    .image-placeholder {
+      width: 100%;
+      height: 400px;
+      background-color: #ccc;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      color: #fff;
+    }
+    .quiz-box {
+      margin: 0 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .quiz-options {
+      display: flex;
+      justify-content: center;
+    }
+    .quiz-options button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #ADD8E6;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    .quiz-options button:hover {
+      background-color: #e5a3ad;
+    }
+    .upload-button {
+      margin-top: 10px;
+    }
+    .start-button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #a5a58d;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadButton1 = document.querySelector('#uploadButton1');
+      const uploadButton2 = document.querySelector('#uploadButton2');
+      const img1 = document.getElementById('uploadedImage1');
+      const img2 = document.getElementById('uploadedImage2');
+
+      function uploadImage(fileName, imgElement) {
+        fetch(fileName)
+                .then(response => response.blob())
+                .then(blob => {
+                  const formData = new FormData();
+                  formData.append('image', blob, fileName);
+
+                  return fetch('http://localhost:3001/tryon', {  // 替換為你的伺服器URL
+                    method: 'POST',
+                    body: formData
+                  });
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    alert('圖片上傳成功！');
+                    console.log('回應資料:', data);
+                    if (data.tryonImgUrl) {
+                      imgElement.src = data.tryonImgUrl;  // 將返回的圖片URL設置到對應的圖片元素
+                    } else {
+                      alert('未能獲取圖片 URL');
+                    }
+                  } else {
+                    alert('圖片上傳失敗，請重試。');
+                  }
+                })
+                .catch(error => {
+                  console.error('錯誤:', error);
+                  alert('發生錯誤，請重試。');
+                });
+      }
+
+      uploadButton1.addEventListener('click', function() {
+        uploadImage('uploads/john1.jpg', img1);  // 替換為 john1.jpg 的實際路徑
+      });
+
+      uploadButton2.addEventListener('click', function() {
+        uploadImage('uploads/john.jpg', img2);  // 替換為 john1.jpg 的實際路徑
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="image-container">
+  <h1>風格-選擇題5</h1>
+</div>
+<div class="container">
+  <div class="image-container">
+    <img id="uploadedImage1" class="image-placeholder" src="" alt="請上傳男生範例圖" />
+    <div class="upload-button">
+      <button id="uploadButton1">上傳男生範例圖</button>
+    </div>
+    <div class="quiz-options">
+      <button>背景為黑色</button>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <h2>請問穿搭助理範例圖的要求是什麼？</h2>
+  </div>
+
+  <div class="image-container">
+    <img id="uploadedImage2" class="image-placeholder" src="" alt="請上傳女生範例圖" />
+    <div class="upload-button">
+      <button id="uploadButton2">圖一</button>
+    </div>
+    <div class="quiz-options">
+      <button>圖一</button>
+    </div>
+  </div>
+</div>
+<button class="start-button" onclick="window.location.href='/type_quiz6.html'">前往題目六</button>
+
+</body>
+</html>
