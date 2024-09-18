@@ -54,18 +54,15 @@
     .upload-button {
       margin-top: 10px;
     }
-     .confirm-button {
+    .confirm-button {
       margin-top: 30px;
       padding: 15px 30px;
-      background-color: #a5a58d;
+      background-color: #4CAF50;
       border: none;
       color: white;
       border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
-    }
-    .confirm-button {
-      background-color: #4CAF50;
     }
     .correct-option::after {
       content: "✔"; /* 打勾符號 */
@@ -79,7 +76,6 @@
       font-size: 18px;
       margin-left: 10px;
     }
-
     .disabled-option {
       background-color: #acd7e5;
       cursor: not-allowed;
@@ -164,12 +160,44 @@
               }
             });
           }
+
+          // 如果 correctCount 為 0 或 1，則記錄到資料庫
+          if (correctCount < 2) {
+            logWrongAnswer();
+          }
         } else {
           alert('請選擇兩個選項');
         }
       });
 
-      // UploadImage function 保留
+      // 新增函數：記錄錯誤答案到資料庫
+      function logWrongAnswer() {
+        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
+        //const userId = getCurrentUserId(); // 您需要實現這個函數
+
+        fetch('/api/wrong', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: 'dennis',
+            type: 1,
+            number: 1
+          })
+        })
+                .then(response => response.json())
+                .then(data => {
+                  // 可以在這裡添加用戶反饋，例如：
+                  alert('您的答案已記錄，謝謝參與！');
+                })
+                .catch(error => {
+                  // 可以在這裡添加錯誤反饋，例如：
+                  alert('抱歉，記錄答案時出現問題。請稍後再試。');
+                });
+      }
+
+      // UploadImage function
       function uploadImage(fileName, imgElement) {
         fetch(fileName)
                 .then(response => response.blob())
@@ -182,7 +210,7 @@
                     body: formData
                   });
                 })
-                .then(response => response.json())
+                .then(response => respoznse.json())
                 .then(data => {
                   if (data.success) {
                     alert('圖片上傳成功！');
@@ -210,7 +238,6 @@
   </script>
 </head>
 <body>
-
 <div class="container">
   <div class="image-container">
     <img id="uploadedImage1" src="" alt="示意圖生成中" />
