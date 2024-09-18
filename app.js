@@ -93,4 +93,38 @@ app.post('/api/wrong', (req, res) => {
     });
 });
 
+
+app.post('/api/correct', (req, res) => {
+    const { user_id, type, number } = req.body;
+
+    // 將收到的參數印在終端機
+    console.log('Received data for correct answer:', { user_id, type, number });
+
+    // 查詢資料庫中是否存在相同的記錄
+    const selectSql = 'SELECT * FROM answerrecords WHERE user_id = ? AND type = ? AND number = ?';
+    ans_db.get(selectSql, [user_id, type, number], (err, row) => {
+        if (err) {
+            console.error('查詢記錄時發生錯誤:', err);
+            return res.status(500).json({ success: false, message: '內部伺服器錯誤' });
+        }
+
+        // 如果找到記錄，則刪除該筆記錄
+        if (row) {
+            const deleteSql = 'DELETE FROM answerrecords WHERE user_id = ? AND type = ? AND number = ?';
+            ans_db.run(deleteSql, [user_id, type, number], function(err) {
+                if (err) {
+                    console.error('刪除記錄時發生錯誤:', err);
+                    return res.status(500).json({ success: false, message: '刪除記錄時發生錯誤' });
+                }
+
+                console.log('記錄已成功刪除:', { user_id, type, number });
+                res.json({ success: true, message: '記錄已成功刪除' });
+            });
+        } else {
+            // 如果沒有找到記錄，返回提示
+            res.json({ success: false, message: '未找到符合條件的記錄' });
+        }
+    });
+});
+
 module.exports = app;

@@ -80,6 +80,16 @@
       background-color: #acd7e5;
       cursor: not-allowed;
     }
+    .start-button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #a5a58d;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -127,6 +137,7 @@
                 }
               });
             });
+            logCorrectAnswer();
           } else if (correctCount === 1) {
             // 一個選對一個錯誤的情況
             optionButtons.forEach(button => {
@@ -197,6 +208,37 @@
                 });
       }
 
+
+      function logCorrectAnswer() {
+        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
+        //const userId = getCurrentUserId(); // 您需要實現這個函數
+
+        fetch('/api/correct', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: 'dennis',
+            type: 1,
+            number: 1
+          })
+        })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    alert(data.message);  // 顯示刪除成功或其他訊息
+                  } else {
+                    alert('無法刪除記錄: ' + data.message);
+                  }
+                })
+                .catch(error => {
+                  console.error('操作時出錯:', error);
+                  alert('操作失敗，請稍後再試。');
+                });
+
+      }
+
       // UploadImage function
       function uploadImage(fileName, imgElement) {
         fetch(fileName)
@@ -235,6 +277,7 @@
         uploadImage('uploads/type_quiz1str.jpg', img1);
       });
     });
+
   </script>
 </head>
 <body>
@@ -257,5 +300,6 @@
     <button id="confirmButton" class="confirm-button">確認答案</button>
   </div>
 </div>
+<button class="start-button" onclick="window.location.href='/type_quiz2.html'">前往題目二</button>
 </body>
 </html>
