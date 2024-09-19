@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>風格_選擇題</title>
+  <title>場合_選擇題</title>
   <style>
     body {
       background-color: #efdaa7;
@@ -98,7 +99,7 @@
       const confirmButton = document.querySelector('#confirmButton');
       const optionButtons = document.querySelectorAll('.quiz-options button');
       let selectedOptions = [];
-      const correctAnswers = ["寬鬆、舒適的服裝，強調隨意感", "女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主"];
+      const correctAnswers = ["無袖洋裝（膝上5公分）"];
 
       // 選擇選項
       optionButtons.forEach(button => {
@@ -108,7 +109,7 @@
             selectedOptions = selectedOptions.filter(opt => opt !== option);
             this.style.backgroundColor = '#ADD8E6';
           } else {
-            if (selectedOptions.length < 2) {
+            if (selectedOptions.length < 1) {
               selectedOptions.push(option);
               this.style.backgroundColor = '#e5a3ad';
             } else {
@@ -120,7 +121,7 @@
 
       // 確認答案
       confirmButton.addEventListener('click', function() {
-        if (selectedOptions.length === 2) {
+        if (selectedOptions.length === 1) {
           let correctCount = 0;  // 計算答對的數量
           selectedOptions.forEach(option => {
             if (correctAnswers.includes(option)) {
@@ -128,8 +129,7 @@
             }
           });
 
-          if (correctCount === 2) {
-            // 如果兩個選項都正確
+          if (correctCount === 1) {
             selectedOptions.forEach(option => {
               optionButtons.forEach(button => {
                 if (button.textContent === option) {
@@ -138,26 +138,7 @@
               });
             });
             logCorrectAnswer();
-          } else if (correctCount === 1) {
-            // 一個選對一個錯誤的情況
-            optionButtons.forEach(button => {
-              if (selectedOptions.includes(button.textContent)) {
-                if (correctAnswers.includes(button.textContent)) {
-                  button.classList.add('correct-option');  // 正確答案顯示打勾
-                } else {
-                  button.classList.add('wrong-option');    // 錯誤選項顯示打叉
-                  button.style.backgroundColor = '#ADD8E6'; // 回到藍色
-                }
-              }
-            });
-            // 顯示其餘的正確答案
-            optionButtons.forEach(button => {
-              if (!selectedOptions.includes(button.textContent) && correctAnswers.includes(button.textContent)) {
-                button.style.backgroundColor = '#e4a2ac';  // 其餘正確答案顯示為紅色
-              }
-            });
           } else {
-            // 兩個選項都錯誤的情況
             optionButtons.forEach(button => {
               if (selectedOptions.includes(button.textContent)) {
                 button.classList.add('wrong-option');   // 錯誤答案顯示打叉
@@ -172,12 +153,12 @@
             });
           }
 
-          // 如果 correctCount 為 0 或 1，則記錄到資料庫
-          if (correctCount < 2) {
+          // 如果 correctCount 為 0 ，則記錄到資料庫
+          if (correctCount < 1) {
             logWrongAnswer();
           }
         } else {
-          alert('請選擇兩個選項');
+          alert('請選擇一個選項');
         }
       });
 
@@ -193,8 +174,8 @@
           },
           body: JSON.stringify({
             user_id: 'dennis',
-            type: 1,
-            number: 1
+            type: 4,
+            number: 3
           })
         })
                 .then(response => response.json())
@@ -220,8 +201,8 @@
           },
           body: JSON.stringify({
             user_id: 'dennis',
-            type: 1,
-            number: 1
+            type: 4,
+            number: 3
           })
         })
                 .then(response => response.json())
@@ -242,7 +223,7 @@
       // UploadImage function
       function uploadImage(fileName, imgElement) {
         fetch(fileName)
-                .then(response => response.blob())
+                .then(responses => responses.blob())
                 .then(blob => {
                   const formData = new FormData();
                   formData.append('image', blob, fileName);
@@ -252,7 +233,7 @@
                     body: formData
                   });
                 })
-                .then(response => response.json())
+                .then(responses => responses.json())
                 .then(data => {
                   if (data.success) {
                     alert('圖片上傳成功！');
@@ -274,7 +255,7 @@
 
       // 生成圖片按鈕的事件處理
       uploadButton1.addEventListener('click', function() {
-        uploadImage('uploads/type_quiz1str.jpg', img1);
+        uploadImage('uploads/occasion-3.jpg', img1);
       });
     });
 
@@ -285,21 +266,21 @@
   <div class="image-container">
     <img id="uploadedImage1" src="" alt="示意圖生成中" />
     <div class="upload-button">
-      <button id="uploadButton1">生成街頭風格示意圖</button>
+      <button id="uploadButton1">示意圖</button>
     </div>
   </div>
 
   <div class="quiz-box">
-    <h2>請問街頭風格的主要特點為何？</h2>
+    <h2>根據“三不露原則”，以下哪一種穿著不適合正式場合？</h2>
     <div class="quiz-options">
-      <button>女生喜愛寬鬆裙裝、層次疊穿；男生偏好剪裁精緻的外套與運動風混搭</button>
-      <button>寬鬆、舒適的服裝，強調隨意感</button>
-      <button>中性色調為主，如米色、灰色、淺藍</button>
-      <button>女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主</button>
+      <button>長袖襯衫+黑色裙子（膝蓋以下）</button>
+      <button>無袖洋裝（膝上5公分）</button>
+      <button>長袖襯衫+黑色西裝褲</button>
+      <button>白襯衫+黑色長裙（膝蓋以下）</button>
     </div>
     <button id="confirmButton" class="confirm-button">確認答案</button>
   </div>
 </div>
-<button class="start-button" onclick="window.location.href='/type_quiz2.html'">前往題目二</button>
+<button class="start-button" onclick="window.location.href='/occasion4.html'">前往題目四</button>
 </body>
 </html>
