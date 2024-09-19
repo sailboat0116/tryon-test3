@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>顏色_選擇題</title>
+  <style>
+    body {
+      background-color: #efdaa7;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+    .container {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+    }
+    .image-container {
+      flex: 1;
+      margin: 0 10px;
+      text-align: center;
+    }
+    .image-container img {
+      max-width: 100%;
+      height: 400px; /* 固定圖片大小 */
+      border-radius: 10px;
+    }
+    .quiz-box {
+      flex: 1;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      text-align: center;
+      margin-left: 20px;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .quiz-options button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #ADD8E6;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    .quiz-options button:hover {
+      background-color: #e5a3ad;
+    }
+    .upload-button {
+      margin-top: 10px;
+    }
+    .confirm-button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .correct-option::after {
+      content: "✔"; /* 打勾符號 */
+      color: green;
+      font-size: 18px;
+      margin-left: 10px;
+    }
+    .wrong-option::after {
+      content: "✘"; /* 錯誤選項打叉符號 */
+      color: red;
+      font-size: 18px;
+      margin-left: 10px;
+    }
+    .disabled-option {
+      background-color: #acd7e5;
+      cursor: not-allowed;
+    }
+    .start-button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #a5a58d;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadButton1 = document.querySelector('#uploadButton1');
+      const img1 = document.getElementById('uploadedImage1');
+      const confirmButton = document.querySelector('#confirmButton');
+      const optionButtons = document.querySelectorAll('.quiz-options button');
+      let selectedOptions = [];
+      const correctAnswers = ["以黑、灰、白為主的套裝"];
+
+      // 選擇選項
+      optionButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const option = this.textContent;
+          if (selectedOptions.includes(option)) {
+            selectedOptions = selectedOptions.filter(opt => opt !== option);
+            this.style.backgroundColor = '#ADD8E6';
+          } else {
+            if (selectedOptions.length < 1) {
+              selectedOptions.push(option);
+              this.style.backgroundColor = '#e5a3ad';
+            } else {
+              alert('最多只能選擇兩個選項');
+            }
+          }
+        });
+      });
+
+      // 確認答案
+      confirmButton.addEventListener('click', function() {
+        if (selectedOptions.length === 1) {
+          let correctCount = 0;  // 計算答對的數量
+          selectedOptions.forEach(option => {
+            if (correctAnswers.includes(option)) {
+              correctCount++;
+            }
+          });
+
+          if (correctCount === 1) {
+            selectedOptions.forEach(option => {
+              optionButtons.forEach(button => {
+                if (button.textContent === option) {
+                  button.classList.add('correct-option'); // 顯示打勾
+                }
+              });
+            });
+            logCorrectAnswer();
+          } else {
+            optionButtons.forEach(button => {
+              if (selectedOptions.includes(button.textContent)) {
+                button.classList.add('wrong-option');   // 錯誤答案顯示打叉
+                button.style.backgroundColor = '#ADD8E6'; // 回到藍色
+              }
+            });
+            // 顯示所有正確的答案
+            optionButtons.forEach(button => {
+              if (correctAnswers.includes(button.textContent)) {
+                button.style.backgroundColor = '#e4a2ac';  // 正確答案顯示為紅色
+              }
+            });
+          }
+
+          // 如果 correctCount 為 0 ，則記錄到資料庫
+          if (correctCount < 1) {
+            logWrongAnswer();
+          }
+        } else {
+          alert('請選擇一個選項');
+        }
+      });
+
+      // 新增函數：記錄錯誤答案到資料庫
+      function logWrongAnswer() {
+        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
+        //const userId = getCurrentUserId(); // 您需要實現這個函數
+
+        fetch('/api/wrong', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: 'dennis',
+            type: 2,
+            number: 1
+          })
+        })
+                .then(response => response.json())
+                .then(data => {
+                  // 可以在這裡添加用戶反饋，例如：
+                  alert('您的答案已記錄，謝謝參與！');
+                })
+                .catch(error => {
+                  // 可以在這裡添加錯誤反饋，例如：
+                  alert('抱歉，記錄答案時出現問題。請稍後再試。');
+                });
+      }
+
+
+      function logCorrectAnswer() {
+        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
+        //const userId = getCurrentUserId(); // 您需要實現這個函數
+
+        fetch('/api/correct', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: 'dennis',
+            type: 2,
+            number: 1
+          })
+        })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    alert(data.message);  // 顯示刪除成功或其他訊息
+                  } else {
+                    alert('恭喜答對');
+                  }
+                })
+                .catch(error => {
+                  console.error('操作時出錯:', error);
+                  alert('操作失敗，請稍後再試。');
+                });
+
+      }
+
+      // UploadImage function
+      function uploadImage(fileName, imgElement) {
+        fetch(fileName)
+                .then(responses => responses.blob())
+                .then(blob => {
+                  const formData = new FormData();
+                  formData.append('image', blob, fileName);
+
+                  return fetch('http://localhost:3001/tryon', {  // 替換為你的伺服器URL
+                    method: 'POST',
+                    body: formData
+                  });
+                })
+                .then(responses => responses.json())
+                .then(data => {
+                  if (data.success) {
+                    alert('圖片上傳成功！');
+                    console.log('回應資料:', data);
+                    if (data.tryonImgUrl) {
+                      imgElement.src = data.tryonImgUrl;  // 將返回的圖片URL設置到對應的圖片元素
+                    } else {
+                      alert('未能獲取圖片 URL');
+                    }
+                  } else {
+                    alert('圖片上傳失敗，請重試。');
+                  }
+                })
+                .catch(error => {
+                  console.error('錯誤:', error);
+                  alert('發生錯誤，請重試。');
+                });
+      }
+
+      // 生成圖片按鈕的事件處理
+      uploadButton1.addEventListener('click', function() {
+        uploadImage('uploads/color-1.jpg', img1);
+      });
+    });
+
+  </script>
+</head>
+<body>
+<div class="container">
+  <div class="image-container">
+    <img id="uploadedImage1" src="" alt="示意圖生成中" />
+    <div class="upload-button">
+      <button id="uploadButton1">示意圖</button>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <h2>下列哪套穿搭符合基本色搭配原則？</h2>
+    <div class="quiz-options">
+      <button>深藍色的西裝</button>
+      <button>以黑、灰、白為主的套裝</button>
+      <button>淺黃色的連身裙</button>
+      <button>大紅色的旗袍</button>
+    </div>
+    <button id="confirmButton" class="confirm-button">確認答案</button>
+  </div>
+</div>
+<button class="start-button" onclick="window.location.href='/color2.html'">前往題目二</button>
+</body>
+</html>
