@@ -98,8 +98,7 @@
       const confirmButton = document.querySelector('#confirmButton');
       const optionButtons = document.querySelectorAll('.quiz-options button');
       let selectedOptions = [];
-      const correctAnswers = ["女生常搭配寬鬆針織衫、過膝裙；男生喜歡寬鬆牛仔褲、襯衫外套", "講求舒適與清新感，色彩通常偏柔和"];
-
+      const correctAnswers = ["可搭配針織衫或西裝外套", "兼顧了穿著的舒適性和專業性","整體乾淨利落"];
       // 選擇選項
       optionButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -108,11 +107,11 @@
             selectedOptions = selectedOptions.filter(opt => opt !== option);
             this.style.backgroundColor = '#ADD8E6';
           } else {
-            if (selectedOptions.length < 2) {
+            if (selectedOptions.length < 3) {
               selectedOptions.push(option);
               this.style.backgroundColor = '#e5a3ad';
             } else {
-              alert('最多只能選擇兩個選項');
+              alert('最多只能選擇三個選項');
             }
           }
         });
@@ -120,7 +119,7 @@
 
       // 確認答案
       confirmButton.addEventListener('click', function () {
-        if (selectedOptions.length === 2) {
+        if (selectedOptions.length === 3) {
           let correctCount = 0;  // 計算答對的數量
           selectedOptions.forEach(option => {
             if (correctAnswers.includes(option)) {
@@ -128,7 +127,7 @@
             }
           });
 
-          if (correctCount === 2) {
+          if (correctCount === 3 || correctCount === 1) {
             // 如果兩個選項都正確
             selectedOptions.forEach(option => {
               optionButtons.forEach(button => {
@@ -138,7 +137,7 @@
               });
             });
             logCorrectAnswer();
-          } else if (correctCount === 1) {
+          } else if (correctCount === 2  || correctCount === 1) {
             // 一個選對一個錯誤的情況
             optionButtons.forEach(button => {
               if (selectedOptions.includes(button.textContent)) {
@@ -173,11 +172,11 @@
           }
 
           // 如果 correctCount 為 0 或 1，則記錄到資料庫
-          if (correctCount < 2) {
+          if (correctCount < 3) {
             logWrongAnswer();
           }
         } else {
-          alert('請選擇兩個選項');
+          alert('請選擇三個選項');
         }
       });
 
@@ -194,7 +193,7 @@
           body: JSON.stringify({
             user_id: 'dennis',
             type: 1,
-            number: 4
+            number: 3
           })
         })
                 .then(response => response.json())
@@ -221,7 +220,7 @@
           body: JSON.stringify({
             user_id: 'dennis',
             type: 1,
-            number: 4
+            number: 3
           })
         })
                 .then(response => response.json())
@@ -229,7 +228,7 @@
                   if (data.success) {
                     alert(data.message);  // 顯示刪除成功或其他訊息
                   } else {
-                    alert('無法刪除記錄: ' + data.message);
+                    alert('恭喜答對');
                   }
                 })
                 .catch(error => {
@@ -285,21 +284,21 @@
   <div class="image-container">
     <img id="uploadedImage1" src="" alt="示意圖生成中" />
     <div class="upload-button">
-      <button id="uploadButton1">生成韓系風格示意圖</button>
+      <button id="uploadButton1">生成商務休閒風格示意圖</button>
     </div>
   </div>
 
   <div class="quiz-box">
-    <h2>請問休閒風格的主要特點為何？</h2>
+    <h2>請問商務休閒風格的主要特點為何？</h2>
     <div class="quiz-options">
-      <button>女生常搭配寬鬆針織衫、過膝裙；男生喜歡寬鬆牛仔褲、襯衫外套</button>
-      <button>注重簡約、精緻且永恆的經典設計</button>
-      <button>融自由混搭、獨特的個人風格</button>
-      <button>講求舒適與清新感，色彩通常偏柔和</button>
+      <button>常見的元素有塗鴉、標語，營造自在率性的氛圍</button>
+      <button>可搭配針織衫或西裝外套計</button>
+      <button>兼顧了穿著的舒適性和專業性</button>
+      <button>整體乾淨利落</button>
     </div>
     <button id="confirmButton" class="confirm-button">確認答案</button>
   </div>
 </div>
-<button class="start-button" onclick="window.location.href='/type_quiz4.html'">前往題目四</button>
+<button class="start-button" onclick="window.location.href='/type_quiz5.html'">前往題目五</button>
 </body>
 </html>
