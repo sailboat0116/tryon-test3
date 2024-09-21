@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>顏色_選擇題</title>
+  <title>季節_選擇題</title>
   <style>
     body {
       background-color: #efdaa7;
@@ -16,13 +16,16 @@
       padding: 20px;
     }
     .image-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* 兩張圖片一行 */
+      gap: 10px;
       flex: 1;
       margin: 0 10px;
-      text-align: center;
     }
     .image-container img {
-      max-width: 100%;
-      height: 400px; /* 固定圖片大小 */
+      width: 100%; /* 讓圖片填滿格子 */
+      height: 200px; /* 設定固定高度，保持大小一致 */
+      object-fit: cover; /* 確保圖片不會變形 */
       border-radius: 10px;
     }
     .quiz-box {
@@ -93,12 +96,10 @@
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const uploadButton1 = document.querySelector('#uploadButton1');
-      const img1 = document.getElementById('uploadedImage1');
       const confirmButton = document.querySelector('#confirmButton');
       const optionButtons = document.querySelectorAll('.quiz-options button');
       let selectedOptions = [];
-      const correctAnswers = ["互補色意為色環中相差在180度的顏色","淺紫色針織上衣+亮黃色直筒長褲"];
+      const correctAnswers = ["是"];
 
       // 選擇選項
       optionButtons.forEach(button => {
@@ -112,7 +113,7 @@
               selectedOptions.push(option);
               this.style.backgroundColor = '#e5a3ad';
             } else {
-              alert('最多只能選擇兩個選項');
+              alert('最多只能選擇一個選項');
             }
           }
         });
@@ -163,9 +164,6 @@
 
       // 新增函數：記錄錯誤答案到資料庫
       function logWrongAnswer() {
-        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-        //const userId = getCurrentUserId(); // 您需要實現這個函數
-
         fetch('/api/wrong', {
           method: 'POST',
           headers: {
@@ -173,26 +171,21 @@
           },
           body: JSON.stringify({
             user_id: 'dennis',
-            type: 2,
-            number: 6
+            type: 3,
+            number: 3
           })
         })
                 .then(response => response.json())
                 .then(data => {
-                  // 可以在這裡添加用戶反饋，例如：
                   alert('您的答案已記錄，謝謝參與！');
                 })
                 .catch(error => {
-                  // 可以在這裡添加錯誤反饋，例如：
                   alert('抱歉，記錄答案時出現問題。請稍後再試。');
                 });
       }
 
 
       function logCorrectAnswer() {
-        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-        //const userId = getCurrentUserId(); // 您需要實現這個函數
-
         fetch('/api/correct', {
           method: 'POST',
           headers: {
@@ -200,8 +193,8 @@
           },
           body: JSON.stringify({
             user_id: 'dennis',
-            type: 2,
-            number: 6
+            type: 3,
+            number: 3
           })
         })
                 .then(response => response.json())
@@ -218,68 +211,22 @@
                 });
 
       }
-
-      // UploadImage function
-      function uploadImage(fileName, imgElement) {
-        fetch(fileName)
-                .then(responses => responses.blob())
-                .then(blob => {
-                  const formData = new FormData();
-                  formData.append('image', blob, fileName);
-
-                  return fetch('http://localhost:3001/tryon', {  // 替換為你的伺服器URL
-                    method: 'POST',
-                    body: formData
-                  });
-                })
-                .then(responses => responses.json())
-                .then(data => {
-                  if (data.success) {
-                    alert('圖片上傳成功！');
-                    console.log('回應資料:', data);
-                    if (data.tryonImgUrl) {
-                      imgElement.src = data.tryonImgUrl;  // 將返回的圖片URL設置到對應的圖片元素
-                    } else {
-                      alert('未能獲取圖片 URL');
-                    }
-                  } else {
-                    alert('圖片上傳失敗，請重試。');
-                  }
-                })
-                .catch(error => {
-                  console.error('錯誤:', error);
-                  alert('發生錯誤，請重試。');
-                });
-      }
-
-      // 生成圖片按鈕的事件處理
-      uploadButton1.addEventListener('click', function() {
-        uploadImage('uploads/color-6.jpg', img1);
-      });
     });
 
   </script>
 </head>
 <body>
 <div class="container">
-  <div class="image-container">
-    <img id="uploadedImage1" src="" alt="示意圖生成中" />
-    <div class="upload-button">
-      <button id="uploadButton1">示意圖</button>
-    </div>
-  </div>
 
   <div class="quiz-box">
-    <h2>下列關於互補色搭配原則，何者正確?</h2>
+    <h2>請問夏季是否適合穿棉質的衣服?</h2>
     <div class="quiz-options">
-      <button>互補色意為色環中相差在180度的顏色</button>
-      <button>使用明度低、彩度高當作外搭或下身</button>
-      <button>淺紫色針織上衣+亮黃色直筒長褲</button>
-      <button>使用基本色作為內搭</button>
+      <button>是</button>
+      <button>否 </button>
     </div>
     <button id="confirmButton" class="confirm-button">確認答案</button>
   </div>
 </div>
-<button class="start-button" onclick="window.location.href='/result.html'">前往分析頁面</button>
+<button class="start-button" onclick="window.location.href='/season4.html'">前往題目四</button>
 </body>
 </html>

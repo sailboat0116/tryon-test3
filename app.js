@@ -79,17 +79,35 @@ app.post('/upload', upload.single('image'), (req, res) => {
 
 app.post('/api/wrong', (req, res) => {
     const { user_id, type, number } = req.body;
-//幫我把這三個印在終端機，顯示在我所紀錄的內容
 
-    // 使用參數化查詢來防止 SQL 注入
-    const sql = 'INSERT INTO answerrecords (user_id, type, number) VALUES (?, ?, ?)';
+    // 在終端機打印 user_id, type, number
+    console.log(`User ID: ${user_id}, Type: ${type}, Number: ${number}`);
 
-    ans_db.run(sql, [user_id, type, number], function(err) {
+    // 先檢查是否已經存在相同的記錄
+    const checkSql = 'SELECT * FROM answerrecords WHERE user_id = ? AND type = ? AND number = ?';
+
+    ans_db.get(checkSql, [user_id, type, number], (err, row) => {
         if (err) {
-            console.error('插入記錄時發生錯誤:', err);
+            console.error('查詢記錄時發生錯誤:', err);
             return res.status(500).json({ success: false, message: '內部伺服器錯誤' });
         }
 
+        // 如果找到了相同的記錄，則不插入
+        if (row) {
+            return res.status(200).json({ success: false, message: '記錄已存在，未插入新數據' });
+        }
+
+        // 否則插入新記錄
+        const insertSql = 'INSERT INTO answerrecords (user_id, type, number) VALUES (?, ?, ?)';
+        ans_db.run(insertSql, [user_id, type, number], function(err) {
+            if (err) {
+                console.error('插入記錄時發生錯誤:', err);
+                return res.status(500).json({ success: false, message: '內部伺服器錯誤' });
+            }
+
+            // 插入成功
+            return res.status(200).json({ success: true, message: '記錄已成功插入' });
+        });
     });
 });
 
@@ -126,5 +144,56 @@ app.post('/api/correct', (req, res) => {
         }
     });
 });
+
+app.post('/api/result', (req, res) => {
+    const { user_id } = req.body;
+
+    // 查詢資料庫中指定user_id且type為1, 2, 3, 4的記錄數量
+    const selectSql = `
+        SELECT type, COUNT(*) as count 
+        FROM answerrecords 
+        WHERE user_id = ? 
+        AND type IN (1, 2, 3, 4) 
+        GROUP BY type
+    `;
+
+    ans_db.all(selectSql, [user_id], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        // 初始化一個物件來儲存每個type的計數
+        const result = {
+            type1: 0,
+            type2: 0,
+            type3: 0,
+            type4: 0
+        };
+
+        // 依照type的值來更新對應的計數
+        rows.forEach(row => {
+            switch (row.type) {
+                case 1:
+                    result.type1 = row.count;
+                    break;
+                case 2:
+                    result.type2 = row.count;
+                    break;
+                case 3:
+                    result.type3 = row.count;
+                    break;
+                case 4:
+                    result.type4 = row.count;
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        // 回傳結果給客戶端
+        res.json(result);
+    });
+});
+
 
 module.exports = app;

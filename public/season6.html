@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>顏色_選擇題</title>
+  <title>季節_選擇題</title>
   <style>
     body {
       background-color: #efdaa7;
@@ -98,7 +99,7 @@
       const confirmButton = document.querySelector('#confirmButton');
       const optionButtons = document.querySelectorAll('.quiz-options button');
       let selectedOptions = [];
-      const correctAnswers = ["互補色意為色環中相差在180度的顏色","淺紫色針織上衣+亮黃色直筒長褲"];
+      const correctAnswers = ["秋冬"];
 
       // 選擇選項
       optionButtons.forEach(button => {
@@ -112,7 +113,7 @@
               selectedOptions.push(option);
               this.style.backgroundColor = '#e5a3ad';
             } else {
-              alert('最多只能選擇兩個選項');
+              alert('最多只能選擇一個選項');
             }
           }
         });
@@ -173,7 +174,7 @@
           },
           body: JSON.stringify({
             user_id: 'dennis',
-            type: 2,
+            type: 3,
             number: 6
           })
         })
@@ -200,7 +201,7 @@
           },
           body: JSON.stringify({
             user_id: 'dennis',
-            type: 2,
+            type: 3,
             number: 6
           })
         })
@@ -254,7 +255,7 @@
 
       // 生成圖片按鈕的事件處理
       uploadButton1.addEventListener('click', function() {
-        uploadImage('uploads/color-6.jpg', img1);
+        uploadImage('uploads/season6-1.jpg', img1);
       });
     });
 
@@ -270,12 +271,10 @@
   </div>
 
   <div class="quiz-box">
-    <h2>下列關於互補色搭配原則，何者正確?</h2>
+    <h2>請問皮衣適合哪個季節？</h2>
     <div class="quiz-options">
-      <button>互補色意為色環中相差在180度的顏色</button>
-      <button>使用明度低、彩度高當作外搭或下身</button>
-      <button>淺紫色針織上衣+亮黃色直筒長褲</button>
-      <button>使用基本色作為內搭</button>
+      <button>春夏</button>
+      <button>秋冬</button>
     </div>
     <button id="confirmButton" class="confirm-button">確認答案</button>
   </div>

@@ -21,7 +21,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                let redirectUrl = "example.html";
+                let redirectUrl = "choose.html";
                 window.location.href = redirectUrl;
             } else {
                 let loginMessage = document.getElementById('loginMessage');
