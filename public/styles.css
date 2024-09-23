@@ -2,31 +2,74 @@ body {
     font-family: 'Noto Sans TC', sans-serif;
     background-color: #f0e6d2;
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
+
+/* 使用flexbox來創建左7右3的佈局 */
+.layout {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.left-content {
+    flex: 7;
+    padding-right: 20px;
+    margin: 0;
+    padding-left: 80px;
+    padding-top: 120px;
+    background-image: url('uploads/login1.jpg');
+    background-size: cover; /* 確保背景覆蓋整個區域 */
+    background-position: center; /* 背景居中顯示 */
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+.left-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.3); /* 半透明的白色覆蓋層，調整透明度 */
+    z-index: 1;
+}
+
+.right-content {
+    flex: 3;
+    position: relative;
+    z-index: 2; /* 右邊區塊正常顯示在透明層上方 */
+}
+
 .header {
     text-align: center;
     margin-bottom: 30px;
     max-width: 700px;
+    position: relative;
+    z-index: 2; /* 保證文字顯示在背景圖片之上 */
 }
+
 .intro-text {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8); /* 半透明背景讓背景圖片透過來 */
     padding: 20px;
-    border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2; /* 確保內容顯示在透明背景層上 */
 }
+
 .container {
     background-color: #fff;
     padding: 30px;
-    border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
 }
+
 .policy-text {
     max-height: 100px;
     overflow-y: auto;
@@ -38,6 +81,7 @@ body {
     font-size: 14px;
     color: #666;
 }
+
 .container input[type="text"], .container input[type="password"] {
     width: 100%;
     padding: 12px;
@@ -47,10 +91,12 @@ body {
     font-size: 16px;
     transition: border-color 0.3s;
 }
+
 .container input[type="text"]:focus, .container input[type="password"]:focus {
     border-color: #ff9f9f;
     outline: none;
 }
+
 .container button {
     width: 100%;
     padding: 12px;
@@ -63,34 +109,42 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 .container button:hover:enabled {
     background-color: #ff7f7f;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
 .container button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
+
 .checkbox-container {
     text-align: left;
     margin-bottom: 20px;
 }
+
 .checkbox-container input[type="checkbox"] {
     margin-right: 10px;
 }
+
 .links {
     margin-top: 20px;
 }
+
 .links a {
     margin: 0 10px;
     color: #ff9f9f;
     text-decoration: none;
     transition: color 0.3s;
 }
+
 .links a:hover {
     color: #ff7f7f;
 }
+
 #loginMessage {
     color: #ff0000;
     margin-top: 15px;
@@ -98,10 +152,16 @@ body {
     opacity: 0;
     transition: opacity 0.3s;
 }
+
 @media (max-width: 600px) {
+    .layout {
+        flex-direction: column;
+    }
+
     .container {
         padding: 20px;
     }
+
     .header {
         margin-bottom: 20px;
     }
