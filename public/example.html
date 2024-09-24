@@ -5,7 +5,8 @@
     <title>穿搭助理</title>
     <style>
         body {
-            background-color: #efdaa7;
+            background-image: url('images/example_back.jpg');
+            background-size: cover; /* Ensure the background covers the entire viewport */
             margin: 0;
             padding: 0;
             position: relative;
@@ -25,18 +26,12 @@
             height: 400px;
             border-radius: 10px;
         }
-        .image-container1 {
-            display: flex; /* 使用 Flexbox 進行排列 */
-            justify-content: center; /* 水平置中 */
-            align-items: center; /* 垂直置中 */
-            margin: 20px 0; /* 添加一些外邊距來與其他內容分開 */
-        }
         .text-box {
             flex: 1;
             margin: 0 10px;
             padding: 10px;
-            border: 10px solid #eac7d0;
-            background-color: #eac7d0;
+            border: 2px dashed #eac7d0; /* Change to dashed border */
+            background-color: rgba(234, 199, 208, 0.8); /* Semi-transparent background */
             border-radius: 10px;
             text-align: left;
         }
@@ -64,7 +59,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             display: block;
-            width: 200%;
+            width: 100%; /* Change to 100% for better alignment */
             text-align: center;
         }
         .upload-option button:hover {
@@ -107,7 +102,7 @@
                         .then(data => {
                             if (data.success) {
                                 alert('圖片上傳成功！');
-                                console.log('Response data:', data); // This will print the entire `data` object
+                                console.log('Response data:', data); // This will print the entire data object
                                 if (data.tryonImgUrl) {
                                     window.location.href = '/preview.html';
                                 } else {
@@ -127,10 +122,13 @@
     </script>
 </head>
 <body>
-<div class="image-container">
-    <h1>圖片上傳說明</h1>
-</div>
 <div class="container">
+    <div class="text-box">
+        <h2>範例圖說明</h2>
+        <p>1.背景為白色</p>
+        <p>2.請穿著短褲以及能夠露出手臂之背心</p>
+        <p>3.請依照範例圖的姿勢攝影</p>
+    </div>
     <div class="image-container">
         <img src="images/img1.jpg" alt="Image 1">
         <h3>男生範例圖</h3>
@@ -138,12 +136,6 @@
     <div class="image-container">
         <img src="images/img2.jpg" alt="Image 2">
         <h3>女生範例圖</h3>
-    </div>
-    <div class="text-box">
-        <h2>範例圖說明</h2>
-        <p>1.背景為白色</p>
-        <p>2.請穿著短褲以及能夠露出手臂之背心</p>
-        <p>3.請依照範例圖的姿勢攝影</p>
     </div>
 </div>
 <div class="upload-button">

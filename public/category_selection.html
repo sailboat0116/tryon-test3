@@ -6,7 +6,7 @@
     <title>穿搭分類選擇</title>
     <style>
         body {
-            background-color: #efdaa7;
+            background-color: #ece4d0;
             margin: 0;
             padding: 0;
             display: flex;
@@ -44,44 +44,54 @@
             margin: 20px;
         }
 
+        /* 調整為一行排列，按鈕圖片不留空白，高比寬長 */
         .button-container {
             display: grid;
-            grid-template-columns: repeat(2, 180px); /* 調整尺寸為原來的1.2倍 */
+            grid-template-columns: repeat(4, 1fr); /* 按鈕排列成一行 */
             gap: 20px;
             justify-content: center;
             align-items: center;
+            width: 100%; /* 使按鈕容器寬度佔據整個視窗 */
         }
 
         .category-button {
             position: relative;
-            width: 180px; /* 調整尺寸為原來的1.2倍 */
-            height: 120px; /* 調整尺寸為原來的1.2倍 */
+            width: 180px; /* 調整為較窄的寬度 */
+            height: 300px; /* 調整為較高的高度 */
             border: none;
             border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.3s; /* 添加過渡效果 */
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* 確保圖片和文字向上對齊 */
+            text-align: center;
         }
 
         .category-button:hover {
-            transform: scale(1.1); /* 當鼠標懸停時放大 */
+            transform: scale(1.05);
         }
 
         .category-button img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(70%);
+            height: 60%; /* 圖片佔按鈕高度的60% */
+            object-fit: cover; /* 確保圖片充滿按鈕且不留白 */
+            border-bottom: 1px solid #ccc; /* 添加底部邊框來分隔圖片和文字 */
         }
 
-        .category-button span {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
+        .category-text {
+            padding: 10px;
             font-size: 18px;
             font-weight: bold;
+            margin-top: 5px; /* 讓文字緊接著圖片顯示 */
+        }
+
+        .category-description {
+            padding: 0 10px 10px 10px;
+            font-size: 14px;
+            color: #555;
+            margin-top: -10px; /* 向上移動介紹文字 */
         }
 
         .back-button {
@@ -100,7 +110,7 @@
     </style>
     <script>
         function goToHomePage() {
-            window.location.href = 'choose.html'; // 將這裡的 'index.html' 改成你的首頁檔案名
+            window.location.href = 'choose.html'; // 將這裡的 'choose.html' 改成你的首頁檔案名
         }
     </script>
 </head>
@@ -115,22 +125,25 @@
 
 <div class="button-container">
     <button class="category-button" onclick="window.location.href='/type_introduce.html'">
-        <img src="images/style.png" alt="風格">
-        <span>風格</span>
+        <img src="images/type_1.jpg" alt="風格">
+        <div class="category-text">風格</div>
+        <div class="category-description">了解不同風格的搭配原則</div>
     </button>
     <button class="category-button" onclick="window.location.href='/color_introduce.html'">
-        <img src="images/color.png" alt="顏色">
-        <span>顏色</span>
+        <img src="images/color_1.jpg" alt="顏色">
+        <div class="category-text">顏色</div>
+        <div class="category-description">顏色搭配的基本知識</div>
     </button>
     <button class="category-button" onclick="window.location.href='/season_introduce.html'">
-        <img src="images/season.png" alt="季節">
-        <span>季節</span>
+        <img src="images/season_1.jpg" alt="季節">
+        <div class="category-text">季節</div>
+        <div class="category-description">季節性穿搭的技巧</div>
     </button>
     <button class="category-button" onclick="window.location.href='/occasion_introduce.html'">
-        <img src="images/occasion.png" alt="場合">
-        <span>場合</span>
+        <img src="images/occasion_1.jpg" alt="場合">
+        <div class="category-text">場合</div>
+        <div class="category-description">根據場合選擇適合的服裝</div>
     </button>
-
 </div>
 
 <!-- 回首頁按鈕 -->
