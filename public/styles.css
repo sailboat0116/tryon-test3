@@ -7,6 +7,25 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    position: relative; /* 確保覆蓋層正確定位 */
+
+    /* 設定背景圖片 */
+    background-image: url('uploads/login1.jpg');
+    background-size: cover; /* 確保背景圖片覆蓋整個頁面 */
+    background-position: center; /* 讓背景圖片居中 */
+    background-repeat: no-repeat; /* 防止背景圖片重複 */
+}
+
+/* 新增一個半透明覆蓋層，讓背景圖片透明一些 */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.3); /* 半透明的白色覆蓋層，調整透明度 */
+    z-index: 1; /* 保證覆蓋層在背景圖片之上，內容之下 */
 }
 
 /* 使用flexbox來創建左7右3的佈局 */
@@ -14,7 +33,9 @@ body {
     display: flex;
     width: 100%;
     max-width: 1200px;
-    margin-left: -50px;
+    margin: 0 auto; /* 置中整個佈局 */
+    position: relative; /* 確保內容在覆蓋層之上 */
+    z-index: 2;
 }
 
 .left-content {
@@ -23,9 +44,8 @@ body {
     margin: 0;
     padding-left: 80px;
     padding-top: 120px;
-    background-image: url('uploads/login1.jpg');
-    background-size: cover; /* 確保背景覆蓋整個區域 */
-    background-position: center; /* 背景居中顯示 */
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     position: relative;
     overflow: hidden;
@@ -38,7 +58,6 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.3); /* 半透明的白色覆蓋層，調整透明度 */
     z-index: 1;
 }
 
@@ -69,7 +88,22 @@ body {
     padding: 30px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
+    max-width: 500px; /* 設置最大寬度，控制表單寬度 */
+    margin: 0 auto; /* 水平置中 */
+    text-align: center; /* 文字居中 */
 }
+
+.container h2 {
+    text-align: center; /* 會員註冊標題置中 */
+}
+
+.container label {
+    text-align: left; /* 標籤靠左對齊 */
+    display: block; /* 讓標籤成為塊級元素以確保靠左 */
+    margin-bottom: 0; /* 增加下邊距 */
+}
+
+
 
 .policy-text {
     max-height: 100px;
@@ -84,9 +118,9 @@ body {
 }
 
 .container input[type="text"], .container input[type="password"] {
-    width: 100%;
+    width: 95%;
     padding: 12px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
