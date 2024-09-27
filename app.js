@@ -189,7 +189,6 @@ app.post('/api/result', (req, res) => {
                     break;
             }
         });
-
         // 回傳結果給客戶端
         res.json(result);
     });

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Assistant Web Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #output {
+            white-space: pre-wrap;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        #userPrompt {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1>OpenAI Assistant Web Interface</h1>
+<input type="text" id="userPrompt" placeholder="Enter your prompt" value="從一數到一千" />
+<button onclick="runAssistant()">Run Assistant</button>
+<div id="output"></div>
+
+<script>
+    const ASSISTANT_API = "https://prod.dvcbot.net/api/assts/v1";
+    const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiTUlOR0NMSVVARkNVLkVEVS5UVyIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyNzQ0NzkxOCwianRpIjoiNzY2MDU1NGMtM2QyYS00MzM5LWFjYTEtNzMxN2M4ZjljY2E3In0.d4akxcJ4QT-QP2g6TIUuQ46i3aTl_nrCfOuhSk-G8iY"; // 替換為您的實際API Key
+    const ASSISTANT_ID = "asst_dvc_W8sxaM6hL6io6xtOreab8a2Y"; // 替換為您的實際Assistant ID
+
+    async function runAssistant() {
+        const userPrompt = document.getElementById('userPrompt').value;
+        const output = document.getElementById('output');
+
+        output.textContent = 'Running...';
+
+        try {
+            // Create a thread
+            const threadResponse = await fetch(`${ASSISTANT_API}/threads`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            const thread = await threadResponse.json();
+
+            // Add a message to the thread
+            await fetch(`${ASSISTANT_API}/threads/${thread.id}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    role: "user",
+                    content: userPrompt
+                })
+            });
+
+            // Run the assistant
+            const runResponse = await fetch(`${ASSISTANT_API}/threads/${thread.id}/runs`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    assistant_id: ASSISTANT_ID
+                })
+            });
+            const run = await runResponse.json();
+
+            // Poll for completion
+            let runStatus = 'in_progress';
+            while (runStatus === 'in_progress' || runStatus === 'queued') {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const statusResponse = await fetch(`${ASSISTANT_API}/threads/${thread.id}/runs/${run.id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`
+                    }
+                });
+                const statusData = await statusResponse.json();
+                runStatus = statusData.status;
+            }
+
+            // Fetch messages
+            const messagesResponse = await fetch(`${ASSISTANT_API}/threads/${thread.id}/messages`, {
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}`
+                }
+            });
+            const messages = await messagesResponse.json();
+
+            // Display the assistant's response
+            output.textContent = messages.data
+                .filter(msg => msg.role === 'assistant')
+                .map(msg => msg.content[0].text.value)
+                .join('\n');
+
+            // Clean up: delete the thread
+            await fetch(`${ASSISTANT_API}/threads/${thread.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}`
+                }
+            });
+        } catch (error) {
+            output.textContent = `Error: ${error.message}`;
+        }
+    }
+</script>
+</body>
+</html>
