@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Router setup
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const axios = require("axios");
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -194,5 +195,84 @@ app.post('/api/result', (req, res) => {
     });
 });
 
+
+const uploads = multer();
+const ASSISTANT_API = "https://prod.dvcbot.net/api/assts/v1";
+const ASSISTANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiTUlOR0NMSVVARkNVLkVEVS5UVyIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyNzQ0NzkxOCwianRpIjoiNzY2MDU1NGMtM2QyYS00MzM5LWFjYTEtNzMxN2M4ZjljY2E3In0.d4akxcJ4QT-QP2g6TIUuQ46i3aTl_nrCfOuhSk-G8iY";
+const ASSISTANT_ID = "asst_dvc_W8sxaM6hL6io6xtOreab8a2Y";
+
+app.post('/run-assistant', uploads.single('image'), async (req, res) => {
+    try {
+        const userPrompt = req.body.prompt;
+        const imageFile = req.file;
+
+        // Create a thread
+        const threadResponse = await axios.post(`${ASSISTANT_API}/threads`, {}, {
+            headers: { 'Authorization': `Bearer ${ASSISTANT_API_KEY}` }
+        });
+        const threadId = threadResponse.data.id;
+
+        // Prepare message content
+        let content = [{ type: "text", text: userPrompt }];
+
+        // Add image to content if uploaded
+        if (imageFile) {
+            const base64Image = imageFile.buffer.toString('base64');
+            content.push({
+                type: "image_url",
+                image_url: {
+                    url: `data:${imageFile.mimetype};base64,${base64Image}`
+                }
+            });
+        }
+
+        // Add a message to the thread
+        await axios.post(`${ASSISTANT_API}/threads/${threadId}/messages`, {
+            role: "user",
+            content: content
+        }, {
+            headers: { 'Authorization': `Bearer ${ASSISTANT_API_KEY}` }
+        });
+
+        // Run the assistant
+        const runResponse = await axios.post(`${ASSISTANT_API}/threads/${threadId}/runs`, {
+            assistant_id: ASSISTANT_ID
+        }, {
+            headers: { 'Authorization': `Bearer ${ASSISTANT_API_KEY}` }
+        });
+        const runId = runResponse.data.id;
+
+        // Poll for completion
+        let runStatus = 'in_progress';
+        while (runStatus === 'in_progress' || runStatus === 'queued') {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const statusResponse = await axios.get(`${ASSISTANT_API}/threads/${threadId}/runs/${runId}`, {
+                headers: { 'Authorization': `Bearer ${ASSISTANT_API_KEY}` }
+            });
+            runStatus = statusResponse.data.status;
+        }
+
+        // Fetch messages
+        const messagesResponse = await axios.get(`${ASSISTANT_API}/threads/${threadId}/messages`, {
+            headers: { 'Authorization': `Bearer ${ASSISTANT_API_KEY}` }
+        });
+
+        // Extract assistant's response
+        const assistantResponse = messagesResponse.data.data
+            .filter(msg => msg.role === 'assistant')
+            .map(msg => msg.content[0].text.value)
+            .join('\n');
+
+        // Clean up: delete the thread
+        await axios.delete(`${ASSISTANT_API}/threads/${threadId}`, {
+            headers: { 'Authorization': `Bearer ${ASSISTANT_API_KEY}` }
+        });
+
+        res.json({ response: assistantResponse });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while processing your request.' });
+    }
+});
 
 module.exports = app;

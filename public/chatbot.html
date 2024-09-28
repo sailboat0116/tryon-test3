@@ -50,10 +50,6 @@
 <div id="output"></div>
 
 <script>
-    const ASSISTANT_API = "https://prod.dvcbot.net/api/assts/v1";
-    const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiTUlOR0NMSVVARkNVLkVEVS5UVyIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyNzQ0NzkxOCwianRpIjoiNzY2MDU1NGMtM2QyYS00MzM5LWFjYTEtNzMxN2M4ZjljY2E3In0.d4akxcJ4QT-QP2g6TIUuQ46i3aTl_nrCfOuhSk-G8iY"; // 替換為您的實際API Key
-    const ASSISTANT_ID = "asst_dvc_W8sxaM6hL6io6xtOreab8a2Y"; // 替換為您的實際Assistant ID
-
     document.getElementById('imageUpload').addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -73,102 +69,26 @@
         output.textContent = 'Running...';
 
         try {
-            // Create a thread
-            const threadResponse = await fetch(`${ASSISTANT_API}/threads`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            const thread = await threadResponse.json();
-
-            // Prepare message content
-            let content = [{ type: "text", text: userPrompt }];
-
-            // Add image to content if uploaded
+            const formData = new FormData();
+            formData.append('prompt', userPrompt);
             if (imageFile) {
-                const base64Image = await getBase64(imageFile);
-                content.push({
-                    type: "image_url",
-                    image_url: {
-                        url: base64Image
-                    }
-                });
+                formData.append('image', imageFile);
             }
 
-            // Add a message to the thread
-            await fetch(`${ASSISTANT_API}/threads/${thread.id}/messages`, {
+            const response = await fetch('/run-assistant', {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    role: "user",
-                    content: content
-                })
+                body: formData
             });
 
-            // Run the assistant
-            const runResponse = await fetch(`${ASSISTANT_API}/threads/${thread.id}/runs`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    assistant_id: ASSISTANT_ID
-                })
-            });
-            const run = await runResponse.json();
-
-            // Poll for completion
-            let runStatus = 'in_progress';
-            while (runStatus === 'in_progress' || runStatus === 'queued') {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const statusResponse = await fetch(`${ASSISTANT_API}/threads/${thread.id}/runs/${run.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${API_KEY}`
-                    }
-                });
-                const statusData = await statusResponse.json();
-                runStatus = statusData.status;
+            if (!response.ok) {
+                throw new Error('Server responded with an error');
             }
 
-            // Fetch messages
-            const messagesResponse = await fetch(`${ASSISTANT_API}/threads/${thread.id}/messages`, {
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`
-                }
-            });
-            const messages = await messagesResponse.json();
-
-            // Display the assistant's response
-            output.textContent = messages.data
-                .filter(msg => msg.role === 'assistant')
-                .map(msg => msg.content[0].text.value)
-                .join('\n');
-
-            // Clean up: delete the thread
-            await fetch(`${ASSISTANT_API}/threads/${thread.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`
-                }
-            });
+            const data = await response.json();
+            output.textContent = data.response;
         } catch (error) {
             output.textContent = `Error: ${error.message}`;
         }
-    }
-
-    function getBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
     }
 </script>
 </body>
