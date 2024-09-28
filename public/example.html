@@ -32,39 +32,45 @@
         .text-box {
             flex: 20px;
             padding: 10px;
-            border: 2px dashed #c6988b; /* Change to dashed border */
-            background-color: rgba(204, 200, 169, 0.43); /* Semi-transparent background */
+            border: 2px dashed #c6988b;
+            background-color: rgba(204, 200, 169, 0.43);
             border-radius: 10px;
             text-align: left;
             color: #601c0b;
         }
-        .upload-button {
+        .upload-button, .bottom-right-button {
             position: fixed;
-            bottom: 30px;
-            left: 80px;
             transform: translateX(-50%);
         }
-        .upload-button button {
+        .upload-button {
+            bottom: 30px;
+            left: 80px;
+        }
+        .bottom-right-button {
+            bottom: 30px;
+            right: 80px; /* 固定到右下角 */
+        }
+        .upload-button button, .bottom-right-button button {
             background-color: #ccc8a9;
             color: #7a270e;
             padding: 15px 30px;
             border: none;
-            border-radius: 30px; /* 让按钮更圆润 */
+            border-radius: 30px;
             font-size: 18px;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
-            transition: background-color 0.3s, box-shadow 0.3s; /* 美化交互效果 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .upload-button button:hover {
+        .upload-button button:hover, .bottom-right-button button:hover {
             background-color: #e4d075;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 鼠标悬停时增加阴影效果 */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         .upload-options {
             position: absolute;
             bottom: calc(100% + 10px);
-            right: 50%; /* 将其相对于上传按钮居中 */
+            right: 50%;
             transform: translateX(70%);
             display: none;
             background-color: #fff;
@@ -81,7 +87,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             display: block;
-            width: 100%; /* Change to 100% for better alignment */
+            width: 100%;
             text-align: center;
         }
         .upload-option button:hover {
@@ -116,7 +122,7 @@
                     const formData = new FormData();
                     formData.append('image', file);
 
-                    fetch('http://localhost:3001/upload', { // 修正 URL
+                    fetch('http://localhost:3001/upload', {
                         method: 'POST',
                         body: formData
                     })
@@ -124,7 +130,7 @@
                         .then(data => {
                             if (data.success) {
                                 alert('圖片上傳成功！');
-                                console.log('Response data:', data); // This will print the entire data object
+                                console.log('Response data:', data);
                                 if (data.tryonImgUrl) {
                                     window.location.href = '/preview.html';
                                 } else {
@@ -161,13 +167,18 @@
     </div>
 </div>
 <div class="upload-button">
-    <button>上傳</button>
+    <button>重新上傳</button>
     <div class="upload-options">
         <div class="upload-option">
             <button onclick="document.getElementById('fileInput').click()">選擇檔案</button>
         </div>
     </div>
     <input type="file" id="fileInput" accept="image/*">
+</div>
+
+<!-- 新增的右下角按鈕 -->
+<div class="bottom-right-button">
+    <button class="start-button" onclick="window.location.href='/preview.html'">保持原樣</button>
 </div>
 
 </body>

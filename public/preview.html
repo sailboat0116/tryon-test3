@@ -13,20 +13,42 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            font-family: Arial, sans-serif;
         }
-        .preview-container {
-            text-align: center;
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .preview-container img {
-            max-width: 100%;
-            max-height: 80vh;
+            max-width: 80%; /* Decreased max width to 80% */
+            max-height: 60vh; /* Decreased max height to 60vh */
             border-radius: 10px;
+            border: 2px solid #ddd; /* Adding border for clarity */
+        }
+        .preview-container p {
+            font-size: 18px;
+            color: #333;
             margin-bottom: 20px;
+            text-align: center;
         }
         .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+            display: flex; /* Changed to flex for side-by-side layout */
+            justify-content: center; /* Center the buttons horizontally */
+            gap: 20px; /* Space between buttons */
+            margin-top: 20px; /* Margin on top */
         }
         .button-container button {
             border: none;
@@ -36,35 +58,39 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
+            border-radius: 5px; /* Adding rounded corners */
         }
         .button-container button:hover {
             background-color: #e5a3ad;
         }
     </style>
     <script>
-
         function handleDisagree() {
             window.location.href = 'example.html';
         }
 
         function handleAgree() {
-            // Redirect to the page with category buttons
             window.location.href = 'category_selection.html';
         }
-
     </script>
 </head>
 <body>
-<div class="preview-container">
-    <h1>照片預覽(要有說明)</h1>
-    <img id="previewImage" src="public/tryon-image.jpg" alt="預覽照片">
+<h1>照片預覽 (要有說明)</h1>
+<div class="container">
+    <!-- 左邊的 tryon-people 圖片 -->
+    <div class="preview-container">
+        <img src="uploads/tryon-people.jpg" alt="Tryon People Image">
+    </div>
 
-    <div class="button-container">
-        <button onclick="handleAgree()">滿意</button>
-        <button onclick="handleDisagree()">不滿意並重新上傳</button>
+    <!-- 右邊的照片預覽 -->
+    <div class="preview-container">
+        <img id="previewImage" src="public/tryon-image.jpg" alt="預覽照片">
     </div>
 </div>
-
-
+<p>這是您選擇的照片預覽。如果您滿意，可以繼續操作；如果不滿意，請重新上傳。</p>
+<div class="button-container">
+    <button onclick="handleAgree()">滿意</button>
+    <button onclick="handleDisagree()">不滿意並重新上傳</button>
+</div>
 </body>
 </html>
