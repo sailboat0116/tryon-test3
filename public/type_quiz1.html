@@ -4,81 +4,90 @@
   <meta charset="UTF-8">
   <title>風格_選擇題</title>
   <style>
+    /* 略過樣式部分，保留原樣 */
     body {
-      background-color: #efdaa7;
+      background-image: url('uploads/login1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       margin: 0;
       padding: 0;
+      font-family: Arial, sans-serif;
       position: relative;
+      opacity: 0.9;
     }
     .container {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      max-width: 600px;
+      margin: 0 auto;
       padding: 20px;
-    }
-    .image-container {
-      flex: 1;
-      margin: 0 10px;
-      text-align: center;
-    }
-    .image-container img {
-      max-width: 100%;
-      height: 400px; /* 固定圖片大小 */
+      background-color: white;
       border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     }
-    .quiz-box {
-      flex: 1;
-      padding: 10px;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      text-align: center;
-      margin-left: 20px;
+    .chat {
+      display: flex;
+      align-items: flex-start;
+      margin: 10px 0;
     }
-    .quiz-options {
+    .chat img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .chat-bubble {
+      background-color: #f0f0f0;
+      border-radius: 20px;
+      padding: 15px;
+      max-width: 80%;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+    .bot-bubble {
+      background-color: #f0f0f0;
+    }
+    .user-bubble {
+      align-self: flex-end;
+      background-color: #add8e6;
+      text-align: right;
+    }
+    .chat-options {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
     }
-    .quiz-options button {
+    .chat-options button {
       margin-top: 10px;
       padding: 10px 20px;
-      background-color: #ADD8E6;
+      background-color: #add8e6;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 14px;
       transition: background-color 0.3s;
     }
-    .quiz-options button:hover {
+    .chat-options button.selected {
       background-color: #e5a3ad;
     }
-    .upload-button {
-      margin-top: 10px;
-    }
     .confirm-button {
-      margin-top: 30px;
-      padding: 15px 30px;
-      background-color: #4CAF50;
+      padding: 8px 15px;
+      background-color: #4caf50;
       border: none;
       color: white;
       border-radius: 5px;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
+      margin-top: 15px;
+      align-self: flex-start;
     }
-    .correct-option::after {
-      content: "✔"; /* 打勾符號 */
-      color: green;
-      font-size: 18px;
-      margin-left: 10px;
+    .image-container img {
+      max-width: 100%;
+      height: 200px;
+      border-radius: 10px;
     }
-    .wrong-option::after {
-      content: "✘"; /* 錯誤選項打叉符號 */
-      color: red;
-      font-size: 18px;
-      margin-left: 10px;
-    }
-    .disabled-option {
-      background-color: #acd7e5;
-      cursor: not-allowed;
+    .upload-button {
+      margin-top: 10px;
     }
     .start-button {
       margin-top: 30px;
@@ -89,217 +98,201 @@
       border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
+      display: none;
     }
   </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const uploadButton1 = document.querySelector('#uploadButton1');
-      const img1 = document.getElementById('uploadedImage1');
-      const confirmButton = document.querySelector('#confirmButton');
-      const optionButtons = document.querySelectorAll('.quiz-options button');
-      let selectedOptions = [];
-      const correctAnswers = ["寬鬆、舒適的服裝，強調隨意感", "女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主"];
-
-      // 選擇選項
-      optionButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const option = this.textContent;
-          if (selectedOptions.includes(option)) {
-            selectedOptions = selectedOptions.filter(opt => opt !== option);
-            this.style.backgroundColor = '#ADD8E6';
-          } else {
-            if (selectedOptions.length < 2) {
-              selectedOptions.push(option);
-              this.style.backgroundColor = '#e5a3ad';
-            } else {
-              alert('最多只能選擇兩個選項');
-            }
-          }
-        });
-      });
-
-      // 確認答案
-      confirmButton.addEventListener('click', function() {
-        if (selectedOptions.length === 2) {
-          let correctCount = 0;  // 計算答對的數量
-          selectedOptions.forEach(option => {
-            if (correctAnswers.includes(option)) {
-              correctCount++;
-            }
-          });
-
-          if (correctCount === 2) {
-            // 如果兩個選項都正確
-            selectedOptions.forEach(option => {
-              optionButtons.forEach(button => {
-                if (button.textContent === option) {
-                  button.classList.add('correct-option'); // 顯示打勾
-                }
-              });
-            });
-            logCorrectAnswer();
-          } else if (correctCount === 1) {
-            // 一個選對一個錯誤的情況
-            optionButtons.forEach(button => {
-              if (selectedOptions.includes(button.textContent)) {
-                if (correctAnswers.includes(button.textContent)) {
-                  button.classList.add('correct-option');  // 正確答案顯示打勾
-                } else {
-                  button.classList.add('wrong-option');    // 錯誤選項顯示打叉
-                  button.style.backgroundColor = '#ADD8E6'; // 回到藍色
-                }
-              }
-            });
-            // 顯示其餘的正確答案
-            optionButtons.forEach(button => {
-              if (!selectedOptions.includes(button.textContent) && correctAnswers.includes(button.textContent)) {
-                button.style.backgroundColor = '#e4a2ac';  // 其餘正確答案顯示為紅色
-              }
-            });
-          } else {
-            // 兩個選項都錯誤的情況
-            optionButtons.forEach(button => {
-              if (selectedOptions.includes(button.textContent)) {
-                button.classList.add('wrong-option');   // 錯誤答案顯示打叉
-                button.style.backgroundColor = '#ADD8E6'; // 回到藍色
-              }
-            });
-            // 顯示所有正確的答案
-            optionButtons.forEach(button => {
-              if (correctAnswers.includes(button.textContent)) {
-                button.style.backgroundColor = '#e4a2ac';  // 正確答案顯示為紅色
-              }
-            });
-          }
-
-          // 如果 correctCount 為 0 或 1，則記錄到資料庫
-          if (correctCount < 2) {
-            logWrongAnswer();
-          }
-        } else {
-          alert('請選擇兩個選項');
-        }
-      });
-
-      // 新增函數：記錄錯誤答案到資料庫
-      function logWrongAnswer() {
-        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-        //const userId = getCurrentUserId(); // 您需要實現這個函數
-
-        fetch('/api/wrong', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: 'dennis',
-            type: 1,
-            number: 1
-          })
-        })
-                .then(response => response.json())
-                .then(data => {
-                  // 可以在這裡添加用戶反饋，例如：
-                  alert('您的答案已記錄，謝謝參與！');
-                })
-                .catch(error => {
-                  // 可以在這裡添加錯誤反饋，例如：
-                  alert('抱歉，記錄答案時出現問題。請稍後再試。');
-                });
-      }
-
-
-      function logCorrectAnswer() {
-        // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-        //const userId = getCurrentUserId(); // 您需要實現這個函數
-
-        fetch('/api/correct', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: 'dennis',
-            type: 1,
-            number: 1
-          })
-        })
-                .then(response => response.json())
-                .then(data => {
-                  if (data.success) {
-                    alert(data.message);  // 顯示刪除成功或其他訊息
-                  } else {
-                    alert('恭喜答對');
-                  }
-                })
-                .catch(error => {
-                  console.error('操作時出錯:', error);
-                  alert('操作失敗，請稍後再試。');
-                });
-
-      }
-
-      // UploadImage function
-      function uploadImage(fileName, imgElement) {
-        fetch(fileName)
-                .then(response => response.blob())
-                .then(blob => {
-                  const formData = new FormData();
-                  formData.append('image', blob, fileName);
-
-                  return fetch('http://localhost:3001/tryon', {  // 替換為你的伺服器URL
-                    method: 'POST',
-                    body: formData
-                  });
-                })
-                .then(response => response.json())
-                .then(data => {
-                  if (data.success) {
-                    alert('圖片上傳成功！');
-                    console.log('回應資料:', data);
-                    if (data.tryonImgUrl) {
-                      imgElement.src = data.tryonImgUrl;  // 將返回的圖片URL設置到對應的圖片元素
-                    } else {
-                      alert('未能獲取圖片 URL');
-                    }
-                  } else {
-                    alert('圖片上傳失敗，請重試。');
-                  }
-                })
-                .catch(error => {
-                  console.error('錯誤:', error);
-                  alert('發生錯誤，請重試。');
-                });
-      }
-
-      // 生成圖片按鈕的事件處理
-      uploadButton1.addEventListener('click', function() {
-        uploadImage('uploads/t_quiz1.jpg', img1);
-      });
-    });
-
-  </script>
 </head>
 <body>
 <div class="container">
-  <div class="image-container">
-    <img id="uploadedImage1" src="" alt="示意圖生成中" />
-    <div class="upload-button">
-      <button id="uploadButton1">生成街頭風格示意圖</button>
+  <!-- 機器人發送的圖片 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <div class="image-container">
+        <img id="uploadedImage1" src="" alt="示意圖生成中" />
+      </div>
+      <div class="upload-button">
+        <button id="uploadButton1">示意圖</button>
+      </div>
     </div>
   </div>
 
-  <div class="quiz-box">
-    <h2>請問街頭風格的主要特點為何？</h2>
-    <div class="quiz-options">
-      <button>女生喜愛寬鬆裙裝、層次疊穿；男生偏好剪裁精緻的外套與運動風混搭</button>
-      <button>寬鬆、舒適的服裝，強調隨意感</button>
-      <button>中性色調為主，如米色、灰色、淺藍</button>
-      <button>女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主</button>
+  <!-- 機器人發送的問題 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <h2>請問街頭風格的主要特點為何？（可複選）</h2>
     </div>
-    <button id="confirmButton" class="confirm-button">確認答案</button>
   </div>
+
+  <!-- 機器人發送的選項與確認按鈕 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <div class="chat-options">
+        <button class="option-button">女生喜愛寬鬆裙裝、層次疊穿；男生偏好剪裁精緻的外套與運動風混搭</button>
+        <button class="option-button">寬鬆、舒適的服裝，強調隨意感</button>
+        <button class="option-button">中性色調為主，如米色、灰色、淺藍</button>
+        <button class="option-button">女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主</button>
+      </div>
+      <!-- 確認答案按鈕 -->
+      <button class="confirm-button" id="confirm-button">確認答案</button>
+    </div>
+  </div>
+
+  <!-- 機器人回應 -->
+  <div class="chat" id="response-container" style="display:none;">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble" id="response-message">
+      <!-- 回應會顯示在這裡 -->
+    </div>
+  </div>
+
+  <!-- 前往下一個題目的按鈕 -->
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/type_quiz2.html'">前往題目二</button>
 </div>
-<button class="start-button" onclick="window.location.href='/type_quiz2.html'">前往題目二</button>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const optionButtons = document.querySelectorAll('.option-button');
+    const correctAnswer = ["寬鬆、舒適的服裝，強調隨意感", "女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主"];
+    const responseContainer = document.getElementById('response-container');
+    const responseMessage = document.getElementById('response-message');
+    const nextQuestionButton = document.getElementById('next-question-button');
+    const confirmButton = document.getElementById('confirm-button');
+    let selectedOptions = [];
+
+    // 監聽選項按鈕點擊
+    optionButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // 切換選擇狀態
+        if (selectedOptions.includes(this.textContent)) {
+          // 如果已選中，則取消選擇
+          selectedOptions = selectedOptions.filter(option => option !== this.textContent);
+          this.classList.remove('selected');
+        } else {
+          // 如果未選中，則添加到選擇列表
+          selectedOptions.push(this.textContent);
+          this.classList.add('selected');
+        }
+      });
+    });
+
+    confirmButton.addEventListener('click', function() {
+      if (selectedOptions.length > 0) {
+        let correctCount = 0;
+
+        // 顯示機器人的回應區塊
+        responseContainer.style.display = 'flex';
+
+        // 檢查選擇的選項是否全部正確
+        selectedOptions.forEach(option => {
+          if (correctAnswer.includes(option)) {
+            correctCount++;
+          }
+        });
+
+        if (correctCount === correctAnswer.length && correctCount === selectedOptions.length) {
+          responseMessage.innerHTML = "答對了！前往下一題吧！";
+          logCorrectAnswer();
+        } else {
+          responseMessage.innerHTML = `答錯了，正確答案是：${correctAnswer.join(" 和 ")}`;
+          logWrongAnswer();
+        }
+
+        // 顯示前往下一題的按鈕
+        nextQuestionButton.style.display = 'block';
+        // 隱藏確認按鈕
+        confirmButton.style.display = 'none';
+      } else {
+        alert('請選擇一個或多個選項');
+      }
+    });
+
+    function logWrongAnswer() {
+      fetch('/api/wrong', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'dennis',
+          type: 1,
+          number: 1
+        })
+      })
+              .then(response => response.json())
+              .then(data => {
+                alert('您的答案已記錄，謝謝參與！');
+              })
+              .catch(error => {
+                alert('抱歉，記錄答案時出現問題。請稍後再試。');
+              });
+    }
+
+    function logCorrectAnswer() {
+      fetch('/api/correct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'dennis',
+          type: 1,
+          number: 1
+        })
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert(data.message);
+                } else {
+                  alert('恭喜答對');
+                }
+              })
+              .catch(error => {
+                alert('操作失敗，請稍後再試。');
+              });
+    }
+
+    // 生成圖片按鈕的事件處理
+    const uploadButton1 = document.getElementById('uploadButton1');
+    const img1 = document.getElementById('uploadedImage1');
+
+    function uploadImage(fileName, imgElement) {
+      fetch(fileName)
+              .then(responses => responses.blob())
+              .then(blob => {
+                const formData = new FormData();
+                formData.append('image', blob, fileName);
+
+                return fetch('http://localhost:3001/tryon', {
+                  method: 'POST',
+                  body: formData
+                });
+              })
+              .then(responses => responses.json())
+              .then(data => {
+                if (data.success) {
+                  alert('圖片上傳成功！');
+                  if (data.tryonImgUrl) {
+                    imgElement.src = data.tryonImgUrl;
+                  } else {
+                    alert('未能獲取圖片 URL');
+                  }
+                } else {
+                  alert('圖片上傳失敗，請重試。');
+                }
+              })
+              .catch(error => {
+                alert('發生錯誤，請重試。');
+              });
+    }
+
+    uploadButton1.addEventListener('click', function() {
+      uploadImage('uploads/t_quiz1.jpg', img1);
+    });
+  });
+</script>
 </body>
 </html>
