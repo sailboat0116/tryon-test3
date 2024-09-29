@@ -103,19 +103,6 @@
 </head>
 <body>
 <div class="container">
-  <!-- 機器人發送的圖片 -->
-  <div class="chat">
-    <img src="images/profile-icon.png" alt="機器人頭像" />
-    <div class="chat-bubble bot-bubble">
-      <div class="image-container">
-        <img id="uploadedImage1" src="" alt="示意圖生成中" />
-      </div>
-      <div class="upload-button">
-        <button id="uploadButton1">示意圖</button>
-      </div>
-    </div>
-  </div>
-
   <!-- 機器人發送的問題 -->
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
@@ -257,44 +244,6 @@
               });
 
     }
-
-    // 生成圖片按鈕的事件處理
-    const uploadButton1 = document.getElementById('uploadButton1');
-    const img1 = document.getElementById('uploadedImage1');
-
-    function uploadImage(fileName, imgElement) {
-      fetch(fileName)
-              .then(responses => responses.blob())
-              .then(blob => {
-                const formData = new FormData();
-                formData.append('image', blob, fileName);
-
-                return fetch('http://localhost:3001/tryon', {
-                  method: 'POST',
-                  body: formData
-                });
-              })
-              .then(responses => responses.json())
-              .then(data => {
-                if (data.success) {
-                  alert('圖片上傳成功！');
-                  if (data.tryonImgUrl) {
-                    imgElement.src = data.tryonImgUrl;
-                  } else {
-                    alert('未能獲取圖片 URL');
-                  }
-                } else {
-                  alert('圖片上傳失敗，請重試。');
-                }
-              })
-              .catch(error => {
-                alert('發生錯誤，請重試。');
-              });
-    }
-
-    uploadButton1.addEventListener('click', function() {
-      uploadImage('uploads/occasion-4.jpg', img1);
-    });
   });
 </script>
 </body>
