@@ -5,30 +5,32 @@
   <title>場合_選擇題</title>
   <style>
     body {
-      background-image: url('uploads/login1.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      background-image: url('uploads/login1.jpg'); /* 背景圖片 */
+      background-size: cover; /* 讓背景圖片覆蓋整個畫面 */
+      background-position: center; /* 背景圖片居中 */
+      background-repeat: no-repeat; /* 不重複背景圖片 */
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
       position: relative;
-      opacity: 0.9;
+      opacity: 0.95; /* 設定背景透明度 */
     }
     .container {
       display: flex;
       flex-direction: column;
       max-width: 600px;
-      margin: 0 auto;
+      margin  : 0 auto;
+      margin-top: 20px;
       padding: 20px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+      background-color: #d6c0a2; /* 設定對話框的背景顏色為白色 */
+      border-radius: 10px; /* 圓角邊框 */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* 添加陰影 */
     }
     .chat {
       display: flex;
       align-items: flex-start;
       margin: 10px 0;
+
     }
     .chat img {
       width: 50px;
@@ -37,14 +39,13 @@
       margin-right: 10px;
     }
     .chat-bubble {
-      background-color: #f0f0f0;
       border-radius: 20px;
       padding: 15px;
       max-width: 80%;
       box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
     }
     .bot-bubble {
-      background-color: #f0f0f0;
+      background-color: #f6eedd; /* 更深的灰色 */
     }
     .user-bubble {
       align-self: flex-end;
@@ -59,7 +60,7 @@
     .chat-options button {
       margin-top: 10px;
       padding: 10px 20px;
-      background-color: #add8e6;
+      background-color: #d6bc9a;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -67,11 +68,11 @@
       transition: background-color 0.3s;
     }
     .chat-options button:hover {
-      background-color: #e5a3ad;
+      background-color: #ca9063;
     }
     .confirm-button {
       padding: 8px 15px;
-      background-color: #4caf50;
+      background-color: #80684b;
       border: none;
       color: white;
       border-radius: 5px;
@@ -82,13 +83,20 @@
     }
     .image-container {
       display: flex;
-      justify-content: space-between;
-      width: 100%;
+      justify-content: space-between; /* 確保圖片之間有間距 */
+    }
+
+    .image-container div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 5px;
     }
     .image-container img {
-      max-width: 48%;
-      height: 200px;
+      width: 230px;
+      height: 100%;
       border-radius: 10px;
+      object-fit: cover;
     }
     .upload-button {
       margin-top: 10px;
@@ -102,7 +110,7 @@
       border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
-      display: none;
+      display: none; /* 預設隱藏 */
     }
   </style>
 </head>
@@ -178,10 +186,10 @@
       button.addEventListener('click', function() {
         if (!selectedOption) {
           selectedOption = this;
-          this.style.backgroundColor = '#e5a3ad';
+          this.style.backgroundColor = '#ca9063';
         } else if (this === selectedOption) {
           selectedOption = null;
-          this.style.backgroundColor = '#add8e6';
+          this.style.backgroundColor = '#d6bc9a';
         }
       });
     });

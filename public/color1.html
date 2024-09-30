@@ -13,15 +13,16 @@
       padding: 0;
       font-family: Arial, sans-serif;
       position: relative;
-      opacity: 0.9; /* 設定背景透明度 */
+      opacity: 0.95; /* 設定背景透明度 */
     }
     .container {
       display: flex;
       flex-direction: column;
       max-width: 600px;
-      margin: 0 auto;
+      margin  : 0 auto;
+      margin-top: 20px;
       padding: 20px;
-      background-color: white; /* 設定對話框的背景顏色為白色 */
+      background-color: #d6c0a2; /* 設定對話框的背景顏色為白色 */
       border-radius: 10px; /* 圓角邊框 */
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* 添加陰影 */
     }
@@ -29,6 +30,7 @@
       display: flex;
       align-items: flex-start;
       margin: 10px 0;
+
     }
     .chat img {
       width: 50px;
@@ -37,14 +39,13 @@
       margin-right: 10px;
     }
     .chat-bubble {
-      background-color: #f0f0f0; /* 深灰色 */
       border-radius: 20px;
       padding: 15px;
       max-width: 80%;
       box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
     }
     .bot-bubble {
-      background-color: #f0f0f0; /* 更深的灰色 */
+      background-color: #f6eedd; /* 更深的灰色 */
     }
     .user-bubble {
       align-self: flex-end;
@@ -59,7 +60,7 @@
     .chat-options button {
       margin-top: 10px;
       padding: 10px 20px;
-      background-color: #add8e6;
+      background-color: #d6bc9a;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -67,11 +68,11 @@
       transition: background-color 0.3s;
     }
     .chat-options button:hover {
-      background-color: #e5a3ad;
+      background-color: #ca9063;
     }
     .confirm-button {
       padding: 8px 15px;
-      background-color: #4caf50;
+      background-color: #80684b;
       border: none;
       color: white;
       border-radius: 5px;
@@ -81,9 +82,10 @@
       align-self: flex-start;
     }
     .image-container img {
-      max-width: 100%;
-      height: 200px;
+      width: 250px;
+      height: 100%;
       border-radius: 10px;
+      object-fit: cover;
     }
     .upload-button {
       margin-top: 10px;
@@ -167,11 +169,11 @@
         // 如果選項未被選擇，則將其標記為選擇
         if (!selectedOption) {
           selectedOption = this;
-          this.style.backgroundColor = '#e5a3ad'; // 將選擇的選項變色
+          this.style.backgroundColor = '#ca9063'; // 將選擇的選項變色
         } else if (this === selectedOption) {
           // 如果再次點擊相同選項，則取消選擇
           selectedOption = null;
-          this.style.backgroundColor = '#add8e6'; // 恢復顏色
+          this.style.backgroundColor = '#d6bc9a'; // 恢復顏色
         }
       });
     });
