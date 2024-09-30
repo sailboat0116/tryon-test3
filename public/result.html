@@ -6,7 +6,10 @@
   <title>結果分析</title>
   <style>
     body {
-      background-color: #efdaa7;
+      background-image: url('images/choose_back.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       margin: 0;
       padding: 0;
       position: relative;
@@ -14,23 +17,57 @@
     }
     .container {
       display: flex;
-      align-items: center;
-      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
       padding: 20px;
+      gap: 40px;
     }
     .image-container {
-      margin-bottom: 20px;
+      margin-right: 100px; /* 向左移動圖片 */
       text-align: center;
     }
     .image-container svg {
       max-width: 100%;
       height: 400px;
       border-radius: 10px;
-      background-color: #f9f9f9;
+      background-color: rgba(246, 238, 221, 0);
     }
     .result-container {
-      margin-top: 20px;
       font-size: 18px;
+      text-align: center;
+      background-color: rgba(186, 186, 186, 0.76); /* 輕綠色背景 */
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+      width: 350px;
+      position: relative; /* 允許小圖絕對定位 */
+    }
+    .result-container p {
+      margin: 10px 0;
+    }
+    .text-box {
+      margin-top: 20px;
+      background-color: #e4d0ba; /* 淡綠色背景 */
+      border: 2px solid #34453a; /* 綠色邊框 */
+      border-radius: 10px; /* 圓角 */
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* 輕微陰影 */
+      padding: 15px;
+      font-size: 16px;
+      width: 300px;
+      position: relative;
+    }
+    .text-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      background-color: #405346; /* 綠色角落背景 */
+      border-top-left-radius: 10px;
+    }
+    .text-box p {
+      margin: 10px 0;
     }
     .quiz-options button {
       margin-top: 10px;
@@ -55,18 +92,36 @@
       font-size: 16px;
       cursor: pointer;
     }
+    .button-container {
+      text-align: center; /* 將按鈕放置於中間 */
+      margin-top: 20px;
+    }
+    .icon {
+      position: absolute;
+      bottom: 100px;
+      right: 175px;
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+      font-weight: bold;
+      text-align: left;
+      margin-bottom: 15px;
+      border-radius: 50%;
+      border: 2px solid black; /* 添加黑色外框 */
+      background-color: white; /* 可以加上背景顏色以便外框顯示清晰 */
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <div class="image-container">
     <svg width="400" height="400" viewBox="-250 -250 500 500">
-      <!-- 背景线 -->
+      <!-- 背景線 -->
       <g stroke="#ccc" stroke-width="1">
         <path d="M0,-180 L0,180 M-180,0 L180,0" />
       </g>
 
-      <!-- 多边形 -->
+      <!-- 多邊形 -->
       <g fill="none" stroke="#ccc" stroke-width="1">
         <polygon points="0,-180 180,0 0,180 -180,0" />
         <polygon points="0,-150 150,0 0,150 -150,0" />
@@ -76,11 +131,11 @@
         <polygon points="0,-30 30,0 0,30 -30,0" />
       </g>
 
-      <!-- 数据多边形 -->
-      <polygon id="dataPolygon" points="0,-180 150,0 0,180 -90,0" fill="rgba(0,0,255,0.2)" stroke="blue" stroke-width="2"/>
+      <!-- 數據多邊形，線條更改為黑色 -->
+      <polygon id="dataPolygon" points="0,-180 150,0 0,180 -90,0" fill="rgba(0,0,0,0.2)" stroke="black" stroke-width="2"/>
 
-      <!-- 标签 -->
-      <g font-size="16" text-anchor="middle" fill="#333">
+      <!-- 標籤 -->
+      <g font-size="20" text-anchor="middle" fill="#333">
         <text x="0" y="-230">風格</text>
         <text x="230" y="5">顏色</text>
         <text x="0" y="245">季節</text>
@@ -91,11 +146,26 @@
 
   <!-- 顯示 API 回傳內容的區域 -->
   <div class="result-container">
-    <p>風格 數量: <span id="type1">0</span></p>
-    <p>顏色 數量: <span id="type2">0</span></p>
-    <p>季節 數量: <span id="type3">0</span></p>
-    <p>場合 數量: <span id="type4">0</span></p>
+    <h2>答題錯誤統計</h2>
+    <p><strong>風格 : </strong> <span id="type1">0</span><strong> 題</strong></p>
+    <p><strong>顏色 : </strong> <span id="type2">0</span><strong> 題</strong></p>
+    <p><strong>季節 : </strong> <span id="type3">0</span><strong> 題</strong></p>
+    <p><strong>場合 : </strong> <span id="type4">0</span><strong> 題</strong></p>
+
+    <!-- 添加的文字框 -->
+    <div class="text-box">
+      <p>透過此圖，您可以瞭解對於四個方向穿搭知識的學習程度，若您還有其他需要了解的部分，請與穿搭助理Marcus對話。</p>
+      <p>希望此教學系統能讓您對於服裝搭配更加熟悉。</p>
+    </div>
   </div>
+
+  <!-- 小圖標，點擊後跳轉到 chatbot.html -->
+  <img src="images/profile-icon.png" class="icon" alt="Chat Icon" onclick="window.location.href='/chatbot.html'"/>
+</div>
+
+<!-- 回首頁按鈕，置中對齊 -->
+<div class="button-container">
+  <button class="start-button" onclick="window.location.href='/category_selection.html'">回首頁</button>
 </div>
 
 <script>
@@ -132,6 +202,6 @@
             console.error('Error fetching data:', error);
           });
 </script>
-<button class="start-button" onclick="window.location.href='/category_selection.html'">回首頁</button>
+
 </body>
 </html>
