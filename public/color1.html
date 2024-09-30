@@ -179,8 +179,6 @@
     // 監聽確認按鈕
     confirmButton.addEventListener('click', function() {
       if (selectedOption) {
-        let correctCount = 0;
-
         // 顯示機器人的回應區塊
         responseContainer.style.display = 'flex';
 
@@ -188,16 +186,13 @@
           responseMessage.innerHTML = "答對了！前往下一題吧！";
           logCorrectAnswer();
         } else {
+          logWrongAnswer();
           responseMessage.innerHTML = `答錯了，正確答案是：${correctAnswer}`;
         }
-
         // 顯示前往下一題的按鈕
         nextQuestionButton.style.display = 'block';
         // 隱藏確認按鈕
         confirmButton.style.display = 'none';
-        if (correctCount < 1) {
-          logWrongAnswer();
-        }
       } else {
         alert('請選擇一個選項');
       }
@@ -205,7 +200,6 @@
     function logWrongAnswer() {
       // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
       //const userId = getCurrentUserId(); // 您需要實現這個函數
-
       fetch('/api/wrong', {
         method: 'POST',
         headers: {

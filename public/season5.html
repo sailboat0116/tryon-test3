@@ -5,83 +5,88 @@
   <title>季節_選擇題</title>
   <style>
     body {
-      background-color: #efdaa7;
+      background-image: url('uploads/login1.jpg'); /* 背景圖片 */
+      background-size: cover; /* 讓背景圖片覆蓋整個畫面 */
+      background-position: center; /* 背景圖片居中 */
+      background-repeat: no-repeat; /* 不重複背景圖片 */
       margin: 0;
       padding: 0;
+      font-family: Arial, sans-serif;
       position: relative;
+      opacity: 0.9; /* 設定背景透明度 */
     }
     .container {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      max-width: 600px;
+      margin: 0 auto;
       padding: 20px;
+      background-color: white; /* 設定對話框的背景顏色為白色 */
+      border-radius: 10px; /* 圓角邊框 */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* 添加陰影 */
     }
-    .image-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 兩張圖片一行 */
-      gap: 10px;
-      flex: 1;
-      margin: 0 10px;
+    .chat {
+      display: flex;
+      align-items: flex-start;
+      margin: 10px 0;
     }
-    .image-container img {
-      width: 100%; /* 讓圖片填滿格子 */
-      height: 200px; /* 設定固定高度，保持大小一致 */
-      object-fit: cover; /* 確保圖片不會變形 */
-      border-radius: 10px;
+    .chat img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
     }
-    .quiz-box {
-      flex: 1;
-      padding: 10px;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      text-align: center;
-      margin-left: 20px;
+    .chat-bubble {
+      background-color: #f0f0f0; /* 深灰色 */
+      border-radius: 20px;
+      padding: 15px;
+      max-width: 80%;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
     }
-    .quiz-options {
+    .bot-bubble {
+      background-color: #f0f0f0; /* 更深的灰色 */
+    }
+    .user-bubble {
+      align-self: flex-end;
+      background-color: #add8e6;
+      text-align: right;
+    }
+    .chat-options {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
     }
-    .quiz-options button {
+    .chat-options button {
       margin-top: 10px;
       padding: 10px 20px;
-      background-color: #ADD8E6;
+      background-color: #add8e6;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 14px;
       transition: background-color 0.3s;
     }
-    .quiz-options button:hover {
+    .chat-options button:hover {
       background-color: #e5a3ad;
     }
-    .upload-button {
-      margin-top: 10px;
-    }
     .confirm-button {
-      margin-top: 30px;
-      padding: 15px 30px;
-      background-color: #4CAF50;
+      padding: 8px 15px;
+      background-color: #4caf50;
       border: none;
       color: white;
       border-radius: 5px;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
+      margin-top: 15px;
+      align-self: flex-start;
     }
-    .correct-option::after {
-      content: "✔"; /* 打勾符號 */
-      color: green;
-      font-size: 18px;
-      margin-left: 10px;
+    .image-container img {
+      max-width: 100%;
+      height: 200px;
+      border-radius: 10px;
     }
-    .wrong-option::after {
-      content: "✘"; /* 錯誤選項打叉符號 */
-      color: red;
-      font-size: 18px;
-      margin-left: 10px;
-    }
-    .disabled-option {
-      background-color: #acd7e5;
-      cursor: not-allowed;
+    .upload-button {
+      margin-top: 10px;
     }
     .start-button {
       margin-top: 30px;
@@ -92,141 +97,148 @@
       border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
+      display: none; /* 預設隱藏 */
     }
   </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const confirmButton = document.querySelector('#confirmButton');
-      const optionButtons = document.querySelectorAll('.quiz-options button');
-      let selectedOptions = [];
-      const correctAnswers = ["秋冬"];
-
-      // 選擇選項
-      optionButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const option = this.textContent;
-          if (selectedOptions.includes(option)) {
-            selectedOptions = selectedOptions.filter(opt => opt !== option);
-            this.style.backgroundColor = '#ADD8E6';
-          } else {
-            if (selectedOptions.length < 1) {
-              selectedOptions.push(option);
-              this.style.backgroundColor = '#e5a3ad';
-            } else {
-              alert('最多只能選擇一個選項');
-            }
-          }
-        });
-      });
-
-      // 確認答案
-      confirmButton.addEventListener('click', function() {
-        if (selectedOptions.length === 1) {
-          let correctCount = 0;  // 計算答對的數量
-          selectedOptions.forEach(option => {
-            if (correctAnswers.includes(option)) {
-              correctCount++;
-            }
-          });
-
-          if (correctCount === 1) {
-            selectedOptions.forEach(option => {
-              optionButtons.forEach(button => {
-                if (button.textContent === option) {
-                  button.classList.add('correct-option'); // 顯示打勾
-                }
-              });
-            });
-            logCorrectAnswer();
-          } else {
-            optionButtons.forEach(button => {
-              if (selectedOptions.includes(button.textContent)) {
-                button.classList.add('wrong-option');   // 錯誤答案顯示打叉
-                button.style.backgroundColor = '#ADD8E6'; // 回到藍色
-              }
-            });
-            // 顯示所有正確的答案
-            optionButtons.forEach(button => {
-              if (correctAnswers.includes(button.textContent)) {
-                button.style.backgroundColor = '#e4a2ac';  // 正確答案顯示為紅色
-              }
-            });
-          }
-
-          // 如果 correctCount 為 0 ，則記錄到資料庫
-          if (correctCount < 1) {
-            logWrongAnswer();
-          }
-        } else {
-          alert('請選擇一個選項');
-        }
-      });
-
-      // 新增函數：記錄錯誤答案到資料庫
-      function logWrongAnswer() {
-        fetch('/api/wrong', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: 'dennis',
-            type: 3,
-            number: 5
-          })
-        })
-                .then(response => response.json())
-                .then(data => {
-                  alert('您的答案已記錄，謝謝參與！');
-                })
-                .catch(error => {
-                  alert('抱歉，記錄答案時出現問題。請稍後再試。');
-                });
-      }
-
-
-      function logCorrectAnswer() {
-        fetch('/api/correct', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: 'dennis',
-            type: 3,
-            number: 5
-          })
-        })
-                .then(response => response.json())
-                .then(data => {
-                  if (data.success) {
-                    alert(data.message);  // 顯示刪除成功或其他訊息
-                  } else {
-                    alert('恭喜答對');
-                  }
-                })
-                .catch(error => {
-                  console.error('操作時出錯:', error);
-                  alert('操作失敗，請稍後再試。');
-                });
-
-      }
-    });
-
-  </script>
 </head>
 <body>
 <div class="container">
-
-  <div class="quiz-box">
-    <h2>請問大地色系適合的季節是?</h2>
-    <div class="quiz-options">
-      <button>春夏</button>
-      <button>秋冬</button>
+  <!-- 機器人發送的問題 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <h2>請問大地色系適合的季節是？</h2>
     </div>
-    <button id="confirmButton" class="confirm-button">確認答案</button>
   </div>
+
+  <!-- 機器人發送的選項與確認按鈕 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <div class="chat-options">
+        <button class="option-button">春夏</button>
+        <button class="option-button">秋冬</button>
+      </div>
+      <!-- 確認答案按鈕 -->
+      <button class="confirm-button" id="confirm-button">確認答案</button>
+    </div>
+  </div>
+
+  <!-- 機器人回應 -->
+  <div class="chat" id="response-container" style="display:none;">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble" id="response-message">
+      <!-- 回應會顯示在這裡 -->
+    </div>
+  </div>
+
+  <!-- 前往下一個題目的按鈕 -->
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/season6.html'">前往題目六</button>
 </div>
-<button class="start-button" onclick="window.location.href='/season6.html'">前往題目六</button>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const optionButtons = document.querySelectorAll('.option-button');
+    const correctAnswer = "秋冬";
+    const responseContainer = document.getElementById('response-container');
+    const responseMessage = document.getElementById('response-message');
+    const nextQuestionButton = document.getElementById('next-question-button');
+    const confirmButton = document.getElementById('confirm-button');
+    let selectedOption = null;
+
+    // 監聽選項按鈕點擊
+    optionButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // 如果選項未被選擇，則將其標記為選擇
+        if (!selectedOption) {
+          selectedOption = this;
+          this.style.backgroundColor = '#e5a3ad'; // 將選擇的選項變色
+        } else if (this === selectedOption) {
+          // 如果再次點擊相同選項，則取消選擇
+          selectedOption = null;
+          this.style.backgroundColor = '#add8e6'; // 恢復顏色
+        }
+      });
+    });
+
+    // 監聽確認按鈕
+    confirmButton.addEventListener('click', function() {
+      if (selectedOption) {
+        // 顯示機器人的回應區塊
+        responseContainer.style.display = 'flex';
+
+        if (selectedOption.textContent === correctAnswer) {
+          responseMessage.innerHTML = "答對了！前往下一題吧！";
+          logCorrectAnswer();
+        } else {
+          logWrongAnswer();
+          responseMessage.innerHTML = `答錯了，正確答案是：${correctAnswer}`;
+        }
+        // 顯示前往下一題的按鈕
+        nextQuestionButton.style.display = 'block';
+        // 隱藏確認按鈕
+        confirmButton.style.display = 'none';
+      } else {
+        alert('請選擇一個選項');
+      }
+    });
+    function logWrongAnswer() {
+      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
+      //const userId = getCurrentUserId(); // 您需要實現這個函數
+
+      fetch('/api/wrong', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'dennis',
+          type: 3,
+          number: 5
+        })
+      })
+              .then(response => response.json())
+              .then(data => {
+                // 可以在這裡添加用戶反饋，例如：
+                alert('您的答案已記錄，謝謝參與！');
+              })
+              .catch(error => {
+                // 可以在這裡添加錯誤反饋，例如：
+                alert('抱歉，記錄答案時出現問題。請稍後再試。');
+              });
+    }
+
+    function logCorrectAnswer() {
+      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
+      //const userId = getCurrentUserId(); // 您需要實現這個函數
+
+      fetch('/api/correct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'dennis',
+          type: 3,
+          number: 5
+        })
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert(data.message);  // 顯示刪除成功或其他訊息
+                } else {
+                  alert('恭喜答對');
+                }
+              })
+              .catch(error => {
+                console.error('操作時出錯:', error);
+                alert('操作失敗，請稍後再試。');
+              });
+
+    }
+
+  });
+</script>
 </body>
 </html>
