@@ -17,7 +17,7 @@
         .container {
             display: flex;
             align-items: center;
-            padding: 20px;
+            padding:20px
         }
         .image-container {
             flex: 1;
@@ -26,30 +26,33 @@
         }
         .image-container img {
             max-width: 150%;
-            height: 550px;
+            height: 500px;
             border-radius: 10px;
         }
         .text-box {
-            flex: 20px;
             padding: 10px;
             border: 2px dashed #c6988b;
             background-color: rgba(204, 200, 169, 0.43);
             border-radius: 10px;
             text-align: left;
             color: #601c0b;
+            width: 400px;
+            height: 200px;
+            box-sizing: border-box;
+            margin-left: 50px;
         }
-        .upload-button, .bottom-right-button {
+        .upload-button {
             position: fixed;
             transform: translateX(-50%);
         }
         .upload-button {
+            position: fixed;
             bottom: 30px;
-            left: 80px;
+            left: 200px;
+            display: flex;
+            gap: 10px;
         }
-        .bottom-right-button {
-            bottom: 30px;
-            right: 80px; /* 固定到右下角 */
-        }
+
         .upload-button button, .bottom-right-button button {
             background-color: #ccc8a9;
             color: #7a270e;
@@ -174,12 +177,9 @@
         </div>
     </div>
     <input type="file" id="fileInput" accept="image/*">
-</div>
-
-<!-- 新增的右下角按鈕 -->
-<div class="bottom-right-button">
     <button class="start-button" onclick="window.location.href='/preview.html'">保持原樣</button>
 </div>
+
 
 </body>
 </html>
