@@ -149,7 +149,7 @@ app.post('/tryon', uploadMemory.single('image'), async (req, res) => {
         const tryon_img_url = await pollTaskStatus(uuid);
 
         // 保存 try-on 圖片到文件
-        const tryonImagePath = path.join(__dirname, 'public', 'occasion1-1.jpg');
+        const tryonImagePath = path.join(__dirname, 'public/occasion', 'occasion1-1.jpg');
         const tryonImageResponse = await axios.get(tryon_img_url, { responseType: 'arraybuffer' });
         fs.writeFileSync(tryonImagePath, tryonImageResponse.data);
 

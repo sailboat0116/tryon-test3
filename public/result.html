@@ -6,7 +6,7 @@
   <title>結果分析</title>
   <style>
     body {
-      background-image: url('images/choose_back.jpg');
+      background-image: url('images/example_back.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -19,7 +19,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 20px;
+      padding: 50px;
       gap: 40px;
     }
     .image-container {
@@ -27,10 +27,11 @@
       text-align: center;
     }
     .image-container svg {
-      max-width: 100%;
-      height: 400px;
+      max-width: 110%;
+      height: 425px;
       border-radius: 10px;
-      background-color: rgba(246, 238, 221, 0);
+      background-color: rgba(186, 186, 186, 0.76); /* 輕綠色背景 */
+      box-shadow: 0 4px 8px black; /* 添加陰影 */
     }
     .result-container {
       font-size: 18px;
@@ -38,7 +39,7 @@
       background-color: rgba(186, 186, 186, 0.76); /* 輕綠色背景 */
       border-radius: 15px;
       padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+      box-shadow: 0 4px 8px black; /* 添加陰影 */
       width: 350px;
       position: relative; /* 允許小圖絕對定位 */
     }
@@ -117,12 +118,12 @@
   <div class="image-container">
     <svg width="400" height="400" viewBox="-250 -250 500 500">
       <!-- 背景線 -->
-      <g stroke="#ccc" stroke-width="1">
+      <g stroke=black stroke-width="1">
         <path d="M0,-180 L0,180 M-180,0 L180,0" />
       </g>
 
       <!-- 多邊形 -->
-      <g fill="none" stroke="#ccc" stroke-width="1">
+      <g fill="none" stroke=black stroke-width="1">
         <polygon points="0,-180 180,0 0,180 -180,0" />
         <polygon points="0,-150 150,0 0,150 -150,0" />
         <polygon points="0,-120 120,0 0,120 -120,0" />
@@ -132,7 +133,7 @@
       </g>
 
       <!-- 數據多邊形，線條更改為黑色 -->
-      <polygon id="dataPolygon" points="0,-180 150,0 0,180 -90,0" fill="rgba(0,0,0,0.2)" stroke="black" stroke-width="2"/>
+      <polygon id="dataPolygon" points="0,-180 150,0 0,180 -90,0" fill="rgba(228,208,186,0.8)" stroke="rgba(108, 60, 0)" stroke-width="2"/>
 
       <!-- 標籤 -->
       <g font-size="20" text-anchor="middle" fill="#333">
