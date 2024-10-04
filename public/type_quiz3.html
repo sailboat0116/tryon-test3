@@ -111,7 +111,7 @@
         <img src="images/profile-icon.png" alt="機器人頭像" />
         <div class="chat-bubble bot-bubble">
             <div class="image-container">
-                <img id="uploadedImage1" src="" alt="示意圖生成中" />
+                <img id="uploadedImage1" src="/public/type/type3.jpg" alt="示意圖生成中" />
             </div>
             <div class="upload-button">
                 <button id="uploadButton1">示意圖</button>
@@ -266,7 +266,11 @@
                 .then(responses => responses.blob())
                 .then(blob => {
                     const formData = new FormData();
+                    const fileplace = 'public/type';
+                    const save_filename = 'type3.jpg';
                     formData.append('image', blob, fileName);
+                    formData.append('fileplace', fileplace);
+                    formData.append('save_filename', save_filename);
 
                     return fetch('http://localhost:3001/tryon', {
                         method: 'POST',

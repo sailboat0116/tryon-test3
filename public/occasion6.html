@@ -123,14 +123,14 @@
       <div class="image-container">
         <!-- First Image -->
         <div>
-          <img id="uploadedImage1" src="" alt="示意圖生成中" />
+          <img id="uploadedImage1" src="/public/occasion/occasion1-6-1.jpg" alt="示意圖生成中" />
           <div class="upload-button">
             <button id="uploadButton1">上傳第一張示意圖</button>
           </div>
         </div>
         <!-- Second Image -->
         <div>
-          <img id="uploadedImage2" src="" alt="示意圖生成中" />
+          <img id="uploadedImage2" src="/public/occasion/occasion1-6-2.jpg" alt="示意圖生成中" />
           <div class="upload-button">
             <button id="uploadButton2">上傳第二張示意圖</button>
           </div>
@@ -275,12 +275,50 @@
     const img1 = document.getElementById('uploadedImage1');
     const img2 = document.getElementById('uploadedImage2');
 
-    function uploadImage(fileName, imgElement) {
+    function uploadImage1(fileName, imgElement) {
       fetch(fileName)
               .then(responses => responses.blob())
               .then(blob => {
                 const formData = new FormData();
+                const fileplace = 'public/occasion';
+                const save_filename = 'occasion1-6-1.jpg';
                 formData.append('image', blob, fileName);
+                formData.append('fileplace', fileplace);
+                formData.append('save_filename', save_filename);
+
+                return fetch('http://localhost:3001/tryon', {
+                  method: 'POST',
+                  body: formData
+                });
+              })
+              .then(responses => responses.json())
+              .then(data => {
+                if (data.success) {
+                  alert('圖片上傳成功！');
+                  if (data.tryonImgUrl) {
+                    imgElement.src = data.tryonImgUrl;
+                  } else {
+                    alert('未能獲取圖片 URL');
+                  }
+                } else {
+                  alert('圖片上傳失敗，請重試。');
+                }
+              })
+              .catch(error => {
+                alert('發生錯誤，請重試。');
+              });
+    }
+
+    function uploadImage2(fileName, imgElement) {
+      fetch(fileName)
+              .then(responses => responses.blob())
+              .then(blob => {
+                const formData = new FormData();
+                const fileplace = 'public/occasion';
+                const save_filename = 'occasion1-6-2.jpg';
+                formData.append('image', blob, fileName);
+                formData.append('fileplace', fileplace);
+                formData.append('save_filename', save_filename);
 
                 return fetch('http://localhost:3001/tryon', {
                   method: 'POST',
@@ -306,11 +344,11 @@
     }
 
     uploadButton1.addEventListener('click', function() {
-      uploadImage('uploads/occasion-6.jpg', img1);
+      uploadImage1('uploads/occasion-6.jpg', img1);
     });
 
     uploadButton2.addEventListener('click', function() {
-      uploadImage('uploads/occasion-5.jpg', img2);
+      uploadImage2('uploads/occasion-5.jpg', img2);
     });
   });
 </script>
