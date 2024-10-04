@@ -134,6 +134,8 @@ app.post('/tryon', uploadMemory.single('image'), async (req, res) => {
     }
 
     try {
+        const fileplace = req.body.fileplace; // 接收 fileplace
+        const save_filename = req.body.save_filename; // 接收 save_filename
         const { uuid, user_img_url, cloth_img_url } = await createTask('tryon-people.jpg', req.file.originalname);
 
         // 上傳圖片
@@ -149,7 +151,7 @@ app.post('/tryon', uploadMemory.single('image'), async (req, res) => {
         const tryon_img_url = await pollTaskStatus(uuid);
 
         // 保存 try-on 圖片到文件
-        const tryonImagePath = path.join(__dirname, 'public/occasion', 'occasion1-1.jpg');
+        const tryonImagePath = path.join(__dirname, fileplace, save_filename);
         const tryonImageResponse = await axios.get(tryon_img_url, { responseType: 'arraybuffer' });
         fs.writeFileSync(tryonImagePath, tryonImageResponse.data);
 
@@ -157,7 +159,7 @@ app.post('/tryon', uploadMemory.single('image'), async (req, res) => {
             success: true,
             message: '圖片處理成功',
             tryonImgUrl: tryon_img_url,
-            tryonImgDownloadUrl: '/occasion1-1.jpg'
+            tryonImgDownloadUrl: save_filename
         });
     } catch (error) {
         console.error(error);
