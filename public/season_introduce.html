@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>場合介紹</title>
+  <title>顏色介紹</title>
   <style>
     body {
-      background-color: #efdaa7;
+      background-color: #eae3cf;
       margin: 0;
       padding: 0;
       display: flex;
@@ -17,10 +17,34 @@
       font-family: Arial, sans-serif;
     }
 
+    .outer-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 900px;
+      height: 400px;
+      padding: 20px;
+      background-color: rgba(223, 201, 169, 0.65); /* 粉色背景 */
+      border: 3px solid rgba(200, 182, 153, 0.75); /* 粉色邊框 */
+      border-radius: 15px;
+      box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.1); /* 添加陰影效果 */
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .content {
+      flex: 1;
+    }
+
     .header {
       display: flex;
       align-items: center;
-      width: 90%;
       margin-bottom: 20px;
     }
 
@@ -40,9 +64,12 @@
       background-color: #f1f1d4;
       padding: 20px;
       border-radius: 10px;
-      text-align: center;
-      margin: 20px;
-      max-width: 600px;
+      margin-top: 20px;
+      text-align: left; /* 文字靠左對齊 */
+    }
+
+    .button-container {
+      text-align: center; /* 按鈕置中 */
     }
 
     .start-button {
@@ -59,21 +86,85 @@
     .start-button:hover {
       background-color: #b7b7a4;
     }
+
+    .image-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px; /* 垂直間距 10px */
+      margin-left: 10px; /* 左側內容與圖片區域間的間距 */
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px; /* 水平間距 10px */
+    }
+
+    .circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .white-circle {
+      background-color: white;
+    }
+
+    .black-circle {
+      background-color: black;
+    }
+
+    .circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <img src="images/profile-icon.png" alt="Profile Icon" class="profile-icon">
-  <div class="title">季節介紹</div>
-</div>
+<div class="outer-container">
+  <div class="container">
+    <!-- 左側內容 -->
+    <div class="content">
+      <div class="header">
+        <img src="images/profile-icon.png" alt="Profile Icon" class="profile-icon">
+        <div class="title">季節介紹</div>
+      </div>
 
-<div class="description">
-  穿搭依季節而變化。春季重層次感與色彩，夏季重清涼與簡潔，秋季講求溫暖與時尚，冬季則以保暖和舒適為主。適應天氣變化，選擇合宜的材質與配色，能提升整體時尚度與舒適感。
-</div>
+      <div class="description">
+        穿搭依季節而變化。春季重層次感與色彩，夏季重清涼與簡潔，秋季講求溫暖與時尚，冬季則以保暖和舒適為主。適應天氣變化，選擇合宜的材質與配色，能提升整體時尚度與舒適感。
+      </div>
 
-<!-- 開始作答按鈕 -->
-<button class="start-button" onclick="window.location.href='/season1.html'">開始作答</button>
+      <!-- 開始作答按鈕，放在置中的容器內 -->
+      <div class="button-container">
+        <button class="start-button" onclick="window.location.href='/season1.html'">開始作答</button>
+      </div>
+    </div>
+
+    <!-- 右側四個圓形圖片 -->
+    <div class="image-grid">
+      <!-- 上排 -->
+      <div class="row">
+        <div class="circle white-circle"></div> <!-- 白色圓圈 -->
+        <div class="circle">
+          <img src="images/white.jpg" alt="White Image"> <!-- 白色圖片 -->
+        </div>
+      </div>
+      <!-- 下排 -->
+      <div class="row">
+        <div class="circle">
+          <img src="images/black.png" alt="Black Image"> <!-- 黑色圖片 -->
+        </div>
+        <div class="circle black-circle"></div> <!-- 黑色圓圈 -->
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

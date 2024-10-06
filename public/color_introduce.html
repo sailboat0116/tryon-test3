@@ -1,16 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-      <html lang="en">
-      <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>顏色介紹</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顏色介紹</title>
   <style>
     body {
-      background-color: #efdaa7;
+      background-color: #eae3cf;
       margin: 0;
       padding: 0;
       display: flex;
@@ -21,10 +17,34 @@
       font-family: Arial, sans-serif;
     }
 
+    .outer-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 900px;
+      height: 400px;
+      padding: 20px;
+      background-color: rgba(223, 201, 169, 0.65); /* 粉色背景 */
+      border: 3px solid rgba(200, 182, 153, 0.75); /* 粉色邊框 */
+      border-radius: 15px;
+      box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.1); /* 添加陰影效果 */
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .content {
+      flex: 1;
+    }
+
     .header {
       display: flex;
       align-items: center;
-      width: 90%;
       margin-bottom: 20px;
     }
 
@@ -44,9 +64,12 @@
       background-color: #f1f1d4;
       padding: 20px;
       border-radius: 10px;
-      text-align: center;
-      margin: 20px;
-      max-width: 600px;
+      margin-top: 20px;
+      text-align: left; /* 文字靠左對齊 */
+    }
+
+    .button-container {
+      text-align: center; /* 按鈕置中 */
     }
 
     .start-button {
@@ -63,27 +86,45 @@
     .start-button:hover {
       background-color: #b7b7a4;
     }
+
+    .image-container {
+      flex: 0 0 250px;
+      margin-left: 20px;
+    }
+
+    .image-container img {
+      width: 100%;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <img src="images/profile-icon.png" alt="Profile Icon" class="profile-icon">
-  <div class="title">顏色介紹</div>
+<div class="outer-container">
+  <div class="container">
+    <!-- 左側內容 -->
+    <div class="content">
+      <div class="header">
+        <img src="images/profile-icon.png" alt="Profile Icon" class="profile-icon">
+        <div class="title">顏色介紹</div>
+      </div>
+
+      <div class="description">
+        給予色彩屬性（明度、色度、色調）的搭配能提升穿搭的層次感與個性。明度決定顏色的亮暗，影響氛圍；高明度顯輕盈活力，低明度顯穩重優雅。色度影響顏色的鮮豔度，鮮豔色吸引注意，低色度則更易搭配。色調則分冷暖色，冷色調顯清新冷靜，暖色調增添溫暖熱情。
+      </div>
+
+      <!-- 開始作答按鈕，放在置中的容器內 -->
+      <div class="button-container">
+        <button class="start-button" onclick="window.location.href='/color1.html'">開始作答</button>
+      </div>
+    </div>
+
+    <!-- 右側圖片 -->
+    <div class="image-container">
+      <img src="images/colorring.png" alt="Color Ring">
+    </div>
+  </div>
 </div>
-
-<div class="description">
-  給予色彩相關屬性(明度、色度、色調)搭配
-</div>
-
-<!-- 開始作答按鈕 -->
-<button class="start-button" onclick="window.location.href='/color1.html'">開始作答</button>
-
-</body>
-</html>
-</title>
-</head>
-<body>
 
 </body>
 </html>
