@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>季節_選擇題</title>
+  <title>顏色_選擇題</title>
   <style>
     body {
       background-image: url('uploads/login1.jpg'); /* 背景圖片 */
@@ -123,17 +123,21 @@
   <!-- 機器人發送的圖片 -->
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
-    <img src="uploads/season1-1.jpg" alt="圖片1">
-    <img src="uploads/season4-1.jpg" alt="圖片2">
-    <img src="uploads/season1-3.jpg" alt="圖片3">
-    <img src="uploads/sheep.jpg" alt="圖片4">
+    <div class="chat-bubble bot-bubble">
+      <div class="image-container">
+        <img id="uploadedImage1" src="/public/color/color4b.jpg" alt="示意圖生成中" />
+      </div>
+      <div class="upload-button">
+        <button id="uploadButton1">示意圖</button>
+      </div>
+    </div>
   </div>
 
   <!-- 機器人發送的問題 -->
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
-      <h3>請問適合春天的服裝材質是以下哪個？</h3>
+      <h3>想要表現出熱情、溫暖、活潑的個性，應選擇下列哪套穿搭?</h3>
     </div>
   </div>
 
@@ -142,10 +146,10 @@
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="chat-options">
-        <button class="option-button">雪紡紗</button>
-        <button class="option-button">毛料</button>
-        <button class="option-button">麂皮</button>
-        <button class="option-button">羊毛</button>
+        <button class="option-button">全黑色的西裝</button>
+        <button class="option-button">黃色T恤+藍色牛仔褲</button>
+        <button class="option-button">深綠色長袖+黑色工裝褲</button>
+        <button class="option-button">淺藍色牛仔外套+白色T恤+灰色棉褲</button>
       </div>
       <!-- 確認答案按鈕 -->
       <button class="confirm-button" id="confirm-button">確認答案</button>
@@ -161,13 +165,13 @@
   </div>
 
   <!-- 前往下一個題目的按鈕 -->
-  <button class="start-button" id="next-question-button" onclick="window.location.href='/season5.html'">前往題目五</button>
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/color5b.html'">前往題目五</button>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const optionButtons = document.querySelectorAll('.option-button');
-    const correctAnswer = "雪紡紗";
+    const correctAnswer = "黃色T恤+藍色牛仔褲";
     const responseContainer = document.getElementById('response-container');
     const responseMessage = document.getElementById('response-message');
     const nextQuestionButton = document.getElementById('next-question-button');
@@ -221,7 +225,7 @@
         },
         body: JSON.stringify({
           user_id: 'dennis',
-          type: 3,
+          type: 2,
           number: 4
         })
       })
@@ -247,7 +251,7 @@
         },
         body: JSON.stringify({
           user_id: 'dennis',
-          type: 3,
+          type: 2,
           number: 4
         })
       })
@@ -263,7 +267,50 @@
                 console.error('操作時出錯:', error);
                 alert('操作失敗，請稍後再試。');
               });
+
     }
+
+    // 生成圖片按鈕的事件處理
+    const uploadButton1 = document.getElementById('uploadButton1');
+    const img1 = document.getElementById('uploadedImage1');
+
+    function uploadImage(fileName, imgElement) {
+      fetch(fileName)
+              .then(responses => responses.blob())
+              .then(blob => {
+                const formData = new FormData();
+                const fileplace = 'public/color';
+                const save_filename = 'color4b.jpg';
+                formData.append('image', blob, fileName);
+                formData.append('fileplace', fileplace);
+                formData.append('save_filename', save_filename);
+
+                return fetch('http://localhost:3001/tryon', {
+                  method: 'POST',
+                  body: formData
+                });
+              })
+              .then(responses => responses.json())
+              .then(data => {
+                if (data.success) {
+                  alert('圖片上傳成功！');
+                  if (data.tryonImgUrl) {
+                    imgElement.src = data.tryonImgUrl;
+                  } else {
+                    alert('未能獲取圖片 URL');
+                  }
+                } else {
+                  alert('圖片上傳失敗，請重試。');
+                }
+              })
+              .catch(error => {
+                alert('發生錯誤，請重試。');
+              });
+    }
+
+    uploadButton1.addEventListener('click', function() {
+      uploadImage('uploads/color_4b.jpg', img1);
+    });
   });
 </script>
 </body>

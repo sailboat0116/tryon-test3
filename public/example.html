@@ -17,7 +17,7 @@
         .container {
             display: flex;
             align-items: center;
-            padding:20px
+            padding: 20px;
         }
         .image-container {
             flex: 1;
@@ -99,15 +99,35 @@
         input[type="file"] {
             display: none;
         }
+        .radio-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const uploadButton = document.querySelector('.upload-button button');
+            const uploadButton = document.querySelector('.upload-button .reupload');
             const uploadOptions = document.querySelector('.upload-options');
-            const resultImage = document.getElementById('resultImage');
-            const imageContainer = document.querySelector('.uploaded-image-container');
+            const startButton = document.querySelector('.start-button');
+
+            // Radio elements
+            const maleRadio = document.getElementById('maleImageRadio');
+            const femaleRadio = document.getElementById('femaleImageRadio');
 
             uploadButton.addEventListener('click', function() {
+                let selectedCategory = '';
+                if (maleRadio.checked) {
+                    selectedCategory = 'male';
+                } else if (femaleRadio.checked) {
+                    selectedCategory = 'female';
+                }
+
+                if (!maleRadio.checked && !femaleRadio.checked) {
+                    alert('請選擇性別再重新上傳。');
+                    return;
+                }
+                localStorage.setItem('selectedCategory', selectedCategory);
+                alert(selectedCategory);
                 uploadOptions.style.display = uploadOptions.style.display === 'block' ? 'none' : 'block';
             });
 
@@ -149,6 +169,27 @@
                         });
                 }
             }
+
+            // Check before navigating to the next page
+            startButton.addEventListener('click', function(event) {
+                let selectedCategory = '';
+                if (maleRadio.checked) {
+                    selectedCategory = 'male';
+                } else if (femaleRadio.checked) {
+                    selectedCategory = 'female';
+                }
+
+                if (selectedCategory === '') {
+                    alert('請選擇一張圖片再繼續。');
+                    event.preventDefault();
+                } else {
+                    alert(selectedCategory);
+                    // 將選擇的類別保存到 localStorage
+                    localStorage.setItem('selectedCategory', selectedCategory);
+                    // 跳轉到下一頁
+                    window.location.href = '/preview.html';
+                }
+            });
         });
     </script>
 </head>
@@ -161,25 +202,32 @@
         <p>3.請依照範例圖的姿勢攝影</p>
     </div>
     <div class="image-container">
+        <div class="radio-container">
+            <input type="radio" id="maleImageRadio" name="imageSelect">
+            <label for="maleImageRadio">選擇男生範例圖</label>
+        </div>
         <img src="images/img1.png" alt="Image 1">
         <h3>男生範例圖</h3>
     </div>
     <div class="image-container">
+        <div class="radio-container">
+            <input type="radio" id="femaleImageRadio" name="imageSelect">
+            <label for="femaleImageRadio">選擇女生範例圖</label>
+        </div>
         <img src="images/img2.png" alt="Image 2">
         <h3>女生範例圖</h3>
     </div>
 </div>
 <div class="upload-button">
-    <button>重新上傳</button>
+    <button class="reupload">重新上傳</button>
     <div class="upload-options">
         <div class="upload-option">
             <button onclick="document.getElementById('fileInput').click()">選擇檔案</button>
         </div>
     </div>
     <input type="file" id="fileInput" accept="image/*">
-    <button class="start-button" onclick="window.location.href='/preview.html'">保持原樣</button>
+    <button class="start-button">保持原樣</button>
 </div>
-
 
 </body>
 </html>
