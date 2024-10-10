@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>風格_選擇題</title>
+  <style>
+    /* 略過樣式部分，保留原樣 */
+    body {
+      background-image: url('uploads/login1.jpg'); /* 背景圖片 */
+      background-size: cover; /* 讓背景圖片覆蓋整個畫面 */
+      background-position: center; /* 背景圖片居中 */
+      background-repeat: no-repeat; /* 不重複背景圖片 */
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      position: relative;
+      opacity: 0.95; /* 設定背景透明度 */
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin  : 0 auto;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #d6c0a2; /* 設定對話框的背景顏色為白色 */
+      border-radius: 10px; /* 圓角邊框 */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* 添加陰影 */
+      position: relative;
+    }
+    .home-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .home-icon img {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+    .chat {
+      display: flex;
+      align-items: flex-start;
+      margin: 10px 0;
+    }
+    .chat img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .chat-bubble {
+      background-color: #f0f0f0;
+      border-radius: 20px;
+      padding: 15px;
+      max-width: 80%;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+    .bot-bubble {
+      background-color: #f6eedd; /* 更深的灰色 */
+    }
+    .user-bubble {
+      align-self: flex-end;
+      background-color: #add8e6;
+      text-align: right;
+    }
+    .chat-options {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .chat-options button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #d6bc9a;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .chat-options button.selected {
+      background-color: #ca9063;
+    }
+    .confirm-button {
+      padding: 8px 15px;
+      background-color: #80684b;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 15px;
+      align-self: flex-start;
+    }
+    .image-container img {
+      width: 250px;
+      height: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .upload-button {
+      margin-top: 10px;
+    }
+    .start-button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #a5a58d;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      display: none; /* 預設隱藏 */
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a href="category_selection.html" class="home-icon">
+    <img src="images/home_icon.png" alt="Home Icon" />
+  </a>
+  <!-- 機器人發送的圖片 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <div class="image-container">
+        <img id="uploadedImage1" src="/public/type/type5.jpg" alt="示意圖生成中" />
+      </div>
+      <div class="upload-button">
+        <button id="uploadButton1">示意圖</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 機器人發送的問題 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <h3>請問運動休閒風格的主要特點為何？（應選兩項）</h3>
+    </div>
+  </div>
+
+  <!-- 機器人發送的選項與確認按鈕 -->
+  <div class="chat">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble">
+      <div class="chat-options">
+        <button class="option-button">強調舒適性，服裝通常使用彈性、透氣、吸汗的材料</button>
+        <button class="option-button">採用簡單流暢的線條設計，避免過度裝飾</button>
+        <button class="option-button">強調五彩繽紛的色調與細膩的針織工藝</button>
+        <button class="option-button">注重細節設計</button>
+      </div>
+      <!-- 確認答案按鈕 -->
+      <button class="confirm-button" id="confirm-button">確認答案</button>
+    </div>
+  </div>
+
+  <!-- 機器人回應 -->
+  <div class="chat" id="response-container" style="display:none;">
+    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <div class="chat-bubble bot-bubble" id="response-message">
+      <!-- 回應會顯示在這裡 -->
+    </div>
+  </div>
+
+  <!-- 前往下一個題目的按鈕 -->
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/type6.html'">前往題目六</button>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const optionButtons = document.querySelectorAll('.option-button');
+    const correctAnswer = ["強調舒適性，服裝通常使用彈性、透氣、吸汗的材料", "採用簡單流暢的線條設計，避免過度裝飾"];
+    const responseContainer = document.getElementById('response-container');
+    const responseMessage = document.getElementById('response-message');
+    const nextQuestionButton = document.getElementById('next-question-button');
+    const confirmButton = document.getElementById('confirm-button');
+    let selectedOptions = [];
+
+    // 監聽選項按鈕點擊
+    optionButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // 切換選擇狀態
+        if (selectedOptions.includes(this.textContent)) {
+          // 如果已選中，則取消選擇
+          selectedOptions = selectedOptions.filter(option => option !== this.textContent);
+          this.classList.remove('selected');
+        } else {
+          // 如果未選中，則添加到選擇列表
+          selectedOptions.push(this.textContent);
+          this.classList.add('selected');
+        }
+      });
+    });
+
+    confirmButton.addEventListener('click', function() {
+      if (selectedOptions.length > 0) {
+        let correctCount = 0;
+
+        // 顯示機器人的回應區塊
+        responseContainer.style.display = 'flex';
+
+        // 檢查選擇的選項是否全部正確
+        selectedOptions.forEach(option => {
+          if (correctAnswer.includes(option)) {
+            correctCount++;
+          }
+        });
+
+        if (correctCount === correctAnswer.length && correctCount === selectedOptions.length) {
+          responseMessage.innerHTML = "答對了！前往下一題吧！";
+          logCorrectAnswer();
+        } else {
+          responseMessage.innerHTML = `答錯了，正確答案是：${correctAnswer.join(" 和 ")}`;
+          logWrongAnswer();
+        }
+
+        // 顯示前往下一題的按鈕
+        nextQuestionButton.style.display = 'block';
+        // 隱藏確認按鈕
+        confirmButton.style.display = 'none';
+      } else {
+        alert('請選擇一個或多個選項');
+      }
+    });
+
+    function logWrongAnswer() {
+      fetch('/api/wrong', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'dennis',
+          type: 1,
+          number: 5
+        })
+      })
+              .then(response => response.json())
+              .then(data => {
+                alert('您的答案已記錄，謝謝參與！');
+              })
+              .catch(error => {
+                alert('抱歉，記錄答案時出現問題。請稍後再試。');
+              });
+    }
+
+    function logCorrectAnswer() {
+      fetch('/api/correct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'dennis',
+          type: 1,
+          number: 5
+        })
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert(data.message);
+                } else {
+                  alert('恭喜答對');
+                }
+              })
+              .catch(error => {
+                alert('操作失敗，請稍後再試。');
+              });
+    }
+
+    // 生成圖片按鈕的事件處理
+    const uploadButton1 = document.getElementById('uploadButton1');
+    const img1 = document.getElementById('uploadedImage1');
+
+    function uploadImage(fileName, imgElement) {
+      fetch(fileName)
+              .then(responses => responses.blob())
+              .then(blob => {
+                const formData = new FormData();
+                const fileplace = 'public/type';
+                const save_filename = 'type5.jpg';
+                formData.append('image', blob, fileName);
+                formData.append('fileplace', fileplace);
+                formData.append('save_filename', save_filename);
+
+                return fetch('http://localhost:3001/tryon', {
+                  method: 'POST',
+                  body: formData
+                });
+              })
+              .then(responses => responses.json())
+              .then(data => {
+                if (data.success) {
+                  alert('圖片上傳成功！');
+                  if (data.tryonImgUrl) {
+                    imgElement.src = data.tryonImgUrl;
+                  } else {
+                    alert('未能獲取圖片 URL');
+                  }
+                } else {
+                  alert('圖片上傳失敗，請重試。');
+                }
+              })
+              .catch(error => {
+                alert('發生錯誤，請重試。');
+              });
+    }
+
+    uploadButton1.addEventListener('click', function() {
+      uploadImage('uploads/t_quiz5.jpg', img1);
+    });
+  });
+</script>
+</body>
+</html>

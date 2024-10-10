@@ -126,7 +126,7 @@
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="image-container">
-        <img id="uploadedImage1" src="/public/type/type5.jpg" alt="示意圖生成中" />
+        <img id="uploadedImage1" src="/public/type/type2b.jpg" alt="示意圖生成中" />
       </div>
       <div class="upload-button">
         <button id="uploadButton1">示意圖</button>
@@ -138,7 +138,7 @@
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
-      <h3>請問運動休閒風格的主要特點為何？（應選兩項）</h3>
+      <h3>請問日系風格的主要特點為何？（應選兩項）</h3>
     </div>
   </div>
 
@@ -147,10 +147,10 @@
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="chat-options">
-        <button class="option-button">強調舒適性，服裝通常使用彈性、透氣、吸汗的材料</button>
-        <button class="option-button">採用簡單流暢的線條設計，避免過度裝飾</button>
-        <button class="option-button">強調五彩繽紛的色調與細膩的針織工藝</button>
-        <button class="option-button">注重細節設計</button>
+        <button class="option-button">選擇簡單、乾淨的單品，不追求過多的裝飾</button>
+        <button class="option-button">講究「層次感」，利用多層次的疊穿方式，將不同的材質和單品組合在一起</button>
+        <button class="option-button">融合傳統與現代設計</button>
+        <button class="option-button">大膽的印花和亮眼色彩</button>
       </div>
       <!-- 確認答案按鈕 -->
       <button class="confirm-button" id="confirm-button">確認答案</button>
@@ -166,13 +166,13 @@
   </div>
 
   <!-- 前往下一個題目的按鈕 -->
-  <button class="start-button" id="next-question-button" onclick="window.location.href='/type_quiz6.html'">前往題目六</button>
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/type3b.html'">前往題目三</button>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const optionButtons = document.querySelectorAll('.option-button');
-    const correctAnswer = ["強調舒適性，服裝通常使用彈性、透氣、吸汗的材料", "採用簡單流暢的線條設計，避免過度裝飾"];
+    const correctAnswer = ["選擇簡單、乾淨的單品，不追求過多的裝飾", "講究「層次感」，利用多層次的疊穿方式，將不同的材質和單品組合在一起"];
     const responseContainer = document.getElementById('response-container');
     const responseMessage = document.getElementById('response-message');
     const nextQuestionButton = document.getElementById('next-question-button');
@@ -235,7 +235,7 @@
         body: JSON.stringify({
           user_id: 'dennis',
           type: 1,
-          number: 5
+          number: 2
         })
       })
               .then(response => response.json())
@@ -256,7 +256,7 @@
         body: JSON.stringify({
           user_id: 'dennis',
           type: 1,
-          number: 5
+          number: 2
         })
       })
               .then(response => response.json())
@@ -282,7 +282,7 @@
               .then(blob => {
                 const formData = new FormData();
                 const fileplace = 'public/type';
-                const save_filename = 'type5.jpg';
+                const save_filename = 'type2b.jpg';
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
@@ -311,7 +311,7 @@
     }
 
     uploadButton1.addEventListener('click', function() {
-      uploadImage('uploads/t_quiz5.jpg', img1);
+      uploadImage('uploads/type_2b.jpg', img1);
     });
   });
 </script>

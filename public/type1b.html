@@ -28,17 +28,6 @@
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* 添加陰影 */
       position: relative;
     }
-    .home-icon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-
-    .home-icon img {
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-    }
     .chat {
       display: flex;
       align-items: flex-start;
@@ -114,6 +103,17 @@
       cursor: pointer;
       display: none; /* 預設隱藏 */
     }
+    .home-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .home-icon img {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -126,7 +126,7 @@
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="image-container">
-        <img id="uploadedImage1" src="/public/type/type4.jpg" alt="示意圖生成中" />
+        <img id="uploadedImage1" src="/public/type/type1b.jpg" alt="示意圖生成中" />
       </div>
       <div class="upload-button">
         <button id="uploadButton1">示意圖</button>
@@ -138,7 +138,7 @@
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
-      <h3>請問商務休閒風格的主要特點為何？（應選三項）</h3>
+      <h3>請問街頭風格的主要特點為何？（應選兩項）</h3>
     </div>
   </div>
 
@@ -147,10 +147,10 @@
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="chat-options">
-        <button class="option-button">常見的元素有塗鴉、標語，營造自在率性的氛圍</button>
-        <button class="option-button">可搭配針織衫或西裝外套</button>
-        <button class="option-button">兼顧了穿著的舒適性和專業性</button>
-        <button class="option-button">整體乾淨利落</button>
+        <button class="option-button">女生喜愛寬鬆裙裝、層次疊穿；男生偏好剪裁精緻的外套與運動風混搭</button>
+        <button class="option-button">寬鬆、舒適的服裝，強調隨意感</button>
+        <button class="option-button">中性色調為主，如米色、灰色、淺藍</button>
+        <button class="option-button">女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主</button>
       </div>
       <!-- 確認答案按鈕 -->
       <button class="confirm-button" id="confirm-button">確認答案</button>
@@ -166,13 +166,13 @@
   </div>
 
   <!-- 前往下一個題目的按鈕 -->
-  <button class="start-button" id="next-question-button" onclick="window.location.href='/type_quiz5.html'">前往題目五</button>
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/type2b.html'">前往題目二</button>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const optionButtons = document.querySelectorAll('.option-button');
-    const correctAnswer = ["可搭配針織衫或西裝外套", "兼顧了穿著的舒適性和專業性","整體乾淨利落"];
+    const correctAnswer = ["寬鬆、舒適的服裝，強調隨意感", "女生偏愛Oversize的上衣與運動褲，男生多以寬鬆短褲、印花T恤為主"];
     const responseContainer = document.getElementById('response-container');
     const responseMessage = document.getElementById('response-message');
     const nextQuestionButton = document.getElementById('next-question-button');
@@ -235,7 +235,7 @@
         body: JSON.stringify({
           user_id: 'dennis',
           type: 1,
-          number: 4
+          number: 1
         })
       })
               .then(response => response.json())
@@ -256,7 +256,7 @@
         body: JSON.stringify({
           user_id: 'dennis',
           type: 1,
-          number: 4
+          number: 1
         })
       })
               .then(response => response.json())
@@ -282,7 +282,7 @@
               .then(blob => {
                 const formData = new FormData();
                 const fileplace = 'public/type';
-                const save_filename = 'type4.jpg';
+                const save_filename = 'type1b.jpg';
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
@@ -311,7 +311,7 @@
     }
 
     uploadButton1.addEventListener('click', function() {
-      uploadImage('uploads/t_quiz4.jpg', img1);
+      uploadImage('uploads/t_quiz1.jpg', img1);
     });
   });
 </script>
