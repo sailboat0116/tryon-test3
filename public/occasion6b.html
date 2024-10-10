@@ -138,14 +138,14 @@
       <div class="image-container">
         <!-- First Image -->
         <div>
-          <img id="uploadedImage1" src="/public/occasion/occasion1-6-1.jpg" alt="示意圖生成中" />
+          <img id="uploadedImage1" src="/public/occasion/occasion1-6-1b.jpg" alt="示意圖生成中" />
           <div class="upload-button">
             <button id="uploadButton1">上傳第一張示意圖</button>
           </div>
         </div>
         <!-- Second Image -->
         <div>
-          <img id="uploadedImage2" src="/public/occasion/occasion1-6-2.jpg" alt="示意圖生成中" />
+          <img id="uploadedImage2" src="/public/occasion/occasion1-6-2b.jpg" alt="示意圖生成中" />
           <div class="upload-button">
             <button id="uploadButton2">上傳第二張示意圖</button>
           </div>
@@ -296,7 +296,7 @@
               .then(blob => {
                 const formData = new FormData();
                 const fileplace = 'public/occasion';
-                const save_filename = 'occasion1-6-1.jpg';
+                const save_filename = 'occasion1-6-1b.jpg';
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
@@ -330,7 +330,7 @@
               .then(blob => {
                 const formData = new FormData();
                 const fileplace = 'public/occasion';
-                const save_filename = 'occasion1-6-2.jpg';
+                const save_filename = 'occasion1-6-2b.jpg';
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
@@ -359,11 +359,11 @@
     }
 
     uploadButton1.addEventListener('click', function() {
-      uploadImage1('uploads/occasion_6g.jpg', img1);
+      uploadImage1('uploads/occasion-6.jpg', img1);
     });
 
     uploadButton2.addEventListener('click', function() {
-      uploadImage2('uploads/occasion_6gng.jpg', img2);
+      uploadImage2('uploads/occasion-5.jpg', img2);
     });
   });
 </script>

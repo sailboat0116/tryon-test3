@@ -93,8 +93,19 @@
       margin-top: 15px;
       align-self: flex-start;
     }
+    .image-container {
+      display: flex;
+      justify-content: space-between; /* 確保圖片之間有間距 */
+    }
+
+    .image-container div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 5px;
+    }
     .image-container img {
-      width: 250px;
+      width: 230px;
       height: 100%;
       border-radius: 10px;
       object-fit: cover;
@@ -120,15 +131,25 @@
   <a href="category_selection.html" class="home-icon">
     <img src="images/home_icon.png" alt="Home Icon" />
   </a>
-  <!-- 機器人發送的圖片 -->
+  <!-- Image Uploads Side by Side -->
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="image-container">
-        <img id="uploadedImage1" src="/public/occasion/occasion1-3.jpg" alt="示意圖生成中" />
-      </div>
-      <div class="upload-button">
-        <button id="uploadButton1">示意圖</button>
+        <!-- First Image -->
+        <div>
+          <img id="uploadedImage1" src="/public/occasion/occasion1-3-1g.jpg" alt="示意圖生成中" />
+          <div class="upload-button">
+            <button id="uploadButton1">上傳第一張示意圖</button>
+          </div>
+        </div>
+        <!-- Second Image -->
+        <div>
+          <img id="uploadedImage2" src="/public/occasion/occasion1-3-2g.jpg" alt="示意圖生成中" />
+          <div class="upload-button">
+            <button id="uploadButton2">上傳第二張示意圖</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -137,7 +158,7 @@
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
-      <h3>根據“三不露原則”，以下哪一種穿著不適合正式場合？</h3>
+      <h3>下列哪種為商務休閒搭配？</h3>
     </div>
   </div>
 
@@ -146,12 +167,9 @@
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="chat-options">
-        <button class="option-button">長袖襯衫+黑色裙子（膝蓋以下）</button>
-        <button class="option-button">無袖洋裝（膝上5公分）</button>
-        <button class="option-button">長袖襯衫+黑色西裝褲</button>
-        <button class="option-button">白襯衫+黑色長裙</button>
+        <button class="option-button">左圖</button>
+        <button class="option-button">右圖</button>
       </div>
-      <!-- 確認答案按鈕 -->
       <button class="confirm-button" id="confirm-button">確認答案</button>
     </div>
   </div>
@@ -165,13 +183,13 @@
   </div>
 
   <!-- 前往下一個題目的按鈕 -->
-  <button class="start-button" id="next-question-button" onclick="window.location.href='/occasion4.html'">前往題目四</button>
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/occasion4.html'">前往分析頁面</button>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const optionButtons = document.querySelectorAll('.option-button');
-    const correctAnswer = "無袖洋裝（膝上5公分）";
+    const correctAnswer = "右圖";
     const responseContainer = document.getElementById('response-container');
     const responseMessage = document.getElementById('response-message');
     const nextQuestionButton = document.getElementById('next-question-button');
@@ -181,14 +199,12 @@
     // 監聽選項按鈕點擊
     optionButtons.forEach(button => {
       button.addEventListener('click', function() {
-        // 如果選項未被選擇，則將其標記為選擇
         if (!selectedOption) {
           selectedOption = this;
-          this.style.backgroundColor = '#ca9063'; // 將選擇的選項變色
+          this.style.backgroundColor = '#ca9063';
         } else if (this === selectedOption) {
-          // 如果再次點擊相同選項，則取消選擇
           selectedOption = null;
-          this.style.backgroundColor = '#d6bc9a'; // 恢復顏色
+          this.style.backgroundColor = '#d6bc9a';
         }
       });
     });
@@ -196,24 +212,22 @@
     // 監聽確認按鈕
     confirmButton.addEventListener('click', function() {
       if (selectedOption) {
-        // 顯示機器人的回應區塊
         responseContainer.style.display = 'flex';
 
         if (selectedOption.textContent === correctAnswer) {
           responseMessage.innerHTML = "答對了！前往下一題吧！";
-          logCorrectAnswer();
+          logCorrectAnswer()
         } else {
-          logWrongAnswer();
+          logWrongAnswer()
           responseMessage.innerHTML = `答錯了，正確答案是：${correctAnswer}`;
         }
-        // 顯示前往下一題的按鈕
         nextQuestionButton.style.display = 'block';
-        // 隱藏確認按鈕
         confirmButton.style.display = 'none';
       } else {
         alert('請選擇一個選項');
       }
     });
+
     function logWrongAnswer() {
       // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
       //const userId = getCurrentUserId(); // 您需要實現這個函數
@@ -272,15 +286,51 @@
 
     // 生成圖片按鈕的事件處理
     const uploadButton1 = document.getElementById('uploadButton1');
+    const uploadButton2 = document.getElementById('uploadButton2');
     const img1 = document.getElementById('uploadedImage1');
+    const img2 = document.getElementById('uploadedImage2');
 
-    function uploadImage(fileName, imgElement) {
+    function uploadImage1(fileName, imgElement) {
       fetch(fileName)
               .then(responses => responses.blob())
               .then(blob => {
                 const formData = new FormData();
                 const fileplace = 'public/occasion';
-                const save_filename = 'occasion1-3.jpg';
+                const save_filename = 'occasion1-3-1g.jpg';
+                formData.append('image', blob, fileName);
+                formData.append('fileplace', fileplace);
+                formData.append('save_filename', save_filename);
+
+                return fetch('http://localhost:3001/tryon', {
+                  method: 'POST',
+                  body: formData
+                });
+              })
+              .then(responses => responses.json())
+              .then(data => {
+                if (data.success) {
+                  alert('圖片上傳成功！');
+                  if (data.tryonImgUrl) {
+                    imgElement.src = data.tryonImgUrl;
+                  } else {
+                    alert('未能獲取圖片 URL');
+                  }
+                } else {
+                  alert('圖片上傳失敗，請重試。');
+                }
+              })
+              .catch(error => {
+                alert('發生錯誤，請重試。');
+              });
+    }
+
+    function uploadImage2(fileName, imgElement) {
+      fetch(fileName)
+              .then(responses => responses.blob())
+              .then(blob => {
+                const formData = new FormData();
+                const fileplace = 'public/occasion';
+                const save_filename = 'occasion1-3-2g.jpg';
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
@@ -309,7 +359,11 @@
     }
 
     uploadButton1.addEventListener('click', function() {
-      uploadImage('uploads/occasion-3.jpg', img1);
+      uploadImage1('uploads/occasion3-1.jpg', img1);
+    });
+
+    uploadButton2.addEventListener('click', function() {
+      uploadImage2('uploads/occasion3-2.jpg', img2);
     });
   });
 </script>

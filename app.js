@@ -199,7 +199,7 @@ app.post('/api/result', (req, res) => {
 const uploads = multer();
 const ASSISTANT_API = "https://prod.dvcbot.net/api/assts/v1";
 const ASSISTANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiTUlOR0NMSVVARkNVLkVEVS5UVyIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyNzQ0NzkxOCwianRpIjoiNzY2MDU1NGMtM2QyYS00MzM5LWFjYTEtNzMxN2M4ZjljY2E3In0.d4akxcJ4QT-QP2g6TIUuQ46i3aTl_nrCfOuhSk-G8iY";
-const ASSISTANT_ID = "asst_dvc_W8sxaM6hL6io6xtOreab8a2Y";
+const ASSISTANT_ID = "asst_dvc_ODLt4b785D3YoXyeyjR6mm17";
 
 app.post('/run-assistant', uploads.single('image'), async (req, res) => {
     try {

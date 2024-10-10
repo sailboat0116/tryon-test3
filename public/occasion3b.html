@@ -138,14 +138,14 @@
       <div class="image-container">
         <!-- First Image -->
         <div>
-          <img id="uploadedImage1" src="/public/occasion/occasion1-6-1.jpg" alt="示意圖生成中" />
+          <img id="uploadedImage1" src="/public/occasion/occasion1-3-1b.jpg" alt="示意圖生成中" />
           <div class="upload-button">
             <button id="uploadButton1">上傳第一張示意圖</button>
           </div>
         </div>
         <!-- Second Image -->
         <div>
-          <img id="uploadedImage2" src="/public/occasion/occasion1-6-2.jpg" alt="示意圖生成中" />
+          <img id="uploadedImage2" src="/public/occasion/occasion1-3-2b.jpg" alt="示意圖生成中" />
           <div class="upload-button">
             <button id="uploadButton2">上傳第二張示意圖</button>
           </div>
@@ -158,7 +158,7 @@
   <div class="chat">
     <img src="images/profile-icon.png" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
-      <h3>下列哪種適合參加晚宴？</h3>
+      <h3>下列哪種為商務休閒搭配？</h3>
     </div>
   </div>
 
@@ -183,7 +183,7 @@
   </div>
 
   <!-- 前往下一個題目的按鈕 -->
-  <button class="start-button" id="next-question-button" onclick="window.location.href='/result.html'">前往分析頁面</button>
+  <button class="start-button" id="next-question-button" onclick="window.location.href='/occasion4b.html'">前往分析頁面</button>
 </div>
 
 <script>
@@ -240,7 +240,7 @@
         body: JSON.stringify({
           user_id: 'dennis',
           type: 4,
-          number: 6
+          number: 3
         })
       })
               .then(response => response.json())
@@ -266,7 +266,7 @@
         body: JSON.stringify({
           user_id: 'dennis',
           type: 4,
-          number: 6
+          number: 3
         })
       })
               .then(response => response.json())
@@ -296,7 +296,7 @@
               .then(blob => {
                 const formData = new FormData();
                 const fileplace = 'public/occasion';
-                const save_filename = 'occasion1-6-1.jpg';
+                const save_filename = 'occasion1-3-1b.jpg';
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
@@ -330,7 +330,7 @@
               .then(blob => {
                 const formData = new FormData();
                 const fileplace = 'public/occasion';
-                const save_filename = 'occasion1-6-2.jpg';
+                const save_filename = 'occasion1-3-2b.jpg';
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
@@ -359,11 +359,11 @@
     }
 
     uploadButton1.addEventListener('click', function() {
-      uploadImage1('uploads/occasion_6g.jpg', img1);
+      uploadImage1('uploads/occasion3-1b.jpg', img1);
     });
 
     uploadButton2.addEventListener('click', function() {
-      uploadImage2('uploads/occasion_6gng.jpg', img2);
+      uploadImage2('uploads/occasion3-2b.jpg', img2);
     });
   });
 </script>
