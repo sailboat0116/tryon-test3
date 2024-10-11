@@ -127,7 +127,6 @@
                     return;
                 }
                 localStorage.setItem('selectedCategory', selectedCategory);
-                alert(selectedCategory);
                 uploadOptions.style.display = uploadOptions.style.display === 'block' ? 'none' : 'block';
             });
 
@@ -184,7 +183,6 @@
                     alert('請選擇一張圖片再繼續。');
                     event.preventDefault();
                 } else {
-                    alert(selectedCategory);
                     // 將選擇的類別保存到 localStorage
                     localStorage.setItem('selectedCategory', selectedCategory);
                     // 跳轉到下一頁

@@ -115,6 +115,26 @@
     }
   </style>
 </head>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 從 localStorage 中讀取選擇的結果
+    const selectedCategory = localStorage.getItem('selectedCategory');
+    const resultElement = document.getElementById('result');
+    const startButton = document.querySelector('.start-button');
+
+    startButton.addEventListener('click', function(event) {
+      if (selectedCategory === 'male') {
+        window.location.href = '/season6b.html';
+      } else if (selectedCategory === 'female') {
+        window.location.href = '/season6.html';
+      } else {
+        resultElement.textContent = '未選擇圖片';
+      }
+    });
+  });
+</script>
+
 <body>
 <div class="container">
   <a href="category_selection.html" class="home-icon">
