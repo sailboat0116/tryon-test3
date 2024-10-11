@@ -283,6 +283,8 @@
                 const formData = new FormData();
                 const fileplace = 'public/type';
                 const save_filename = 'type3b.jpg';
+                const category = "4";
+                formData.append('category', category);
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);

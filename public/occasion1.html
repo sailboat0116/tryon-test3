@@ -281,10 +281,11 @@
                 const formData = new FormData();
                 const fileplace = 'public/occasion';
                 const save_filename = 'occasion1-1.jpg';
+                const category = "3";
+                formData.append('category', category);
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
-
                 return fetch('http://localhost:3001/tryon', {
                   method: 'POST',
                   body: formData

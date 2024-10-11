@@ -144,7 +144,8 @@
                 if (file) {
                     const formData = new FormData();
                     formData.append('image', file);
-
+                    const category = "4";
+                    formData.append('category', category);
                     fetch('http://localhost:3001/upload', {
                         method: 'POST',
                         body: formData

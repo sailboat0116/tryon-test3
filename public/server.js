@@ -40,11 +40,11 @@ const headers = {
 };
 
 // 輔助函數：創建任務
-async function createTask(user_img_name, cloth_img_name) {
+async function createTask(user_img_name, cloth_img_name,category) {
     const response = await axios.post(`${API_URL}/create-task`, {
         user_img_name,
         cloth_img_name,
-        category: "4",
+        category,
         caption: "test"
     }, { headers });
 
@@ -66,8 +66,8 @@ async function submitTask(task_uuid) {
 
 // 輔助函數：輪詢任務狀態
 async function pollTaskStatus(task_uuid) {
-    for (let i = 0; i < 20; i++) {
-        await new Promise(resolve => setTimeout(resolve, 20000));  // 睡眠 20 秒
+    for (let i = 0; i < 15; i++) {
+        await new Promise(resolve => setTimeout(resolve, 10000));  // 睡眠 20 秒
         const response = await axios.post(`${API_URL}/get-task-info`, { task_uuid }, { headers });
         console.log('輪詢任務狀態:', response.data);
 
@@ -85,10 +85,11 @@ async function pollTaskStatus(task_uuid) {
 
 // /upload 路由
 app.post('/upload', uploadDisk.single('image'), async (req, res) => {
+
     if (!req.file) {
         return res.status(400).json({ success: false, message: '沒有上傳文件' });
     }
-
+    const { category } = req.body;
     try {
         const imagePath = path.join(__dirname, req.file.path);
         const tryonPeoplePath = path.join(__dirname, 'uploads', 'tryon-people.jpg');
@@ -96,7 +97,7 @@ app.post('/upload', uploadDisk.single('image'), async (req, res) => {
         // 將上傳的圖片保存為 tryon-people.jpg
         fs.copyFileSync(imagePath, tryonPeoplePath);
 
-        const { uuid, user_img_url, cloth_img_url } = await createTask(req.file.originalname, 'john1.jpg');
+        const { uuid, user_img_url, cloth_img_url } = await createTask(req.file.originalname, 'john1.jpg',category);
 
         // 上傳圖片
         await axios.put(user_img_url, fs.createReadStream(tryonPeoplePath), {
@@ -132,11 +133,11 @@ app.post('/tryon', uploadMemory.single('image'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ success: false, message: '沒有上傳文件' });
     }
-
+    const { category } = req.body;
     try {
         const fileplace = req.body.fileplace; // 接收 fileplace
         const save_filename = req.body.save_filename; // 接收 save_filename
-        const { uuid, user_img_url, cloth_img_url } = await createTask('tryon-people.jpg', req.file.originalname);
+        const { uuid, user_img_url, cloth_img_url } = await createTask('tryon-people.jpg', req.file.originalname,category);
 
         // 上傳圖片
         await axios.put(cloth_img_url, req.file.buffer, {

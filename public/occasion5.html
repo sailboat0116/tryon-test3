@@ -282,6 +282,8 @@
                 const formData = new FormData();
                 const fileplace = 'public/occasion';
                 const save_filename = 'occasion1-5.jpg';
+                const category = "4";
+                formData.append('category', category);
                 formData.append('image', blob, fileName);
                 formData.append('fileplace', fileplace);
                 formData.append('save_filename', save_filename);
