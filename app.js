@@ -198,8 +198,12 @@ app.post('/api/result', (req, res) => {
 
 const uploads = multer();
 const ASSISTANT_API = "https://prod.dvcbot.net/api/assts/v1";
-const ASSISTANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiTUlOR0NMSVVARkNVLkVEVS5UVyIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyNzQ0NzkxOCwianRpIjoiNzY2MDU1NGMtM2QyYS00MzM5LWFjYTEtNzMxN2M4ZjljY2E3In0.d4akxcJ4QT-QP2g6TIUuQ46i3aTl_nrCfOuhSk-G8iY";
+const ASSISTANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiTUlOR0NMSVVARkNVLkVEVS5UVyIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyODYyMzI0OSwianRpIjoiMjhmZWI1NDAtODVkNy00ZmIwLTlhZjctODA3YTgyNzQyMjBiIn0.svaX1g8-nluLto2UgSjFwhyoI_je0WemWpxDdTvsCCo";
 const ASSISTANT_ID = "asst_dvc_ODLt4b785D3YoXyeyjR6mm17";
+const fs = require('fs');
+
+// 定義預設圖片路徑
+const defaultImagePath = path.join(__dirname, 'uploads', 'aaa.jpg')
 
 app.post('/run-assistant', uploads.single('image'), async (req, res) => {
     try {
@@ -212,10 +216,10 @@ app.post('/run-assistant', uploads.single('image'), async (req, res) => {
         });
         const threadId = threadResponse.data.id;
 
-        // Prepare message content
+        // Prepare message content with user prompt
         let content = [{ type: "text", text: userPrompt }];
 
-        // Add image to content if uploaded
+        // Conditionally add image to content if uploaded
         if (imageFile) {
             const base64Image = imageFile.buffer.toString('base64');
             content.push({
@@ -226,7 +230,7 @@ app.post('/run-assistant', uploads.single('image'), async (req, res) => {
             });
         }
 
-        // Add a message to the thread
+        // Add the message to the thread
         await axios.post(`${ASSISTANT_API}/threads/${threadId}/messages`, {
             role: "user",
             content: content
@@ -260,7 +264,8 @@ app.post('/run-assistant', uploads.single('image'), async (req, res) => {
         // Extract assistant's response
         const assistantResponse = messagesResponse.data.data
             .filter(msg => msg.role === 'assistant')
-            .map(msg => msg.content[0].text.value)
+            .flatMap(msg => msg.content)
+            .map(content => content.text?.value || '')
             .join('\n');
 
         // Clean up: delete the thread

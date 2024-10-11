@@ -145,7 +145,7 @@
         const output = document.getElementById('output');
 
         // 在用戶輸入的文字後面加上 "(限回答100字)"
-        userPrompt += " (限回答100字)";
+        userPrompt += " (限回答300字)";
 
         output.textContent = 'Running...';
 
@@ -154,6 +154,11 @@
             formData.append('prompt', userPrompt);  // 傳送處理後的 prompt
             if (imageFile) {
                 formData.append('image', imageFile);
+            }
+            else {
+                const response = await fetch('/aaa.jpg'); // Fetch the fallback image
+                const blob = await response.blob();
+                formData.append('image', blob, 'aaa.jpg');
             }
 
             const response = await fetch('/run-assistant', {
