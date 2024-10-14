@@ -122,7 +122,7 @@
     <!-- 圖片區塊 -->
     <div class="image-section">
         <input type="file" id="imageUpload" accept="image/*" class="form-control mb-3" />
-        <img id="imagePreview" class="image-preview" alt="Image Preview" />
+        <img id="imagePreview" class="image-preview" alt="Image Preview" style="display: none;" />
         <button class="btn btn-secondary mt-3" onclick="window.location.href='/choose.html'">回首頁</button>
     </div>
 </div>
@@ -130,12 +130,17 @@
 <script>
     document.getElementById('imageUpload').addEventListener('change', function(event) {
         const file = event.target.files[0];
+        const imagePreview = document.getElementById('imagePreview');
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('imagePreview').src = e.target.result;
+                imagePreview.style.display = 'block';
             }
             reader.readAsDataURL(file);
+        }
+        else{
+            imagePreview.style.display = 'none';
         }
     });
 
