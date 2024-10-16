@@ -238,13 +238,6 @@
           number: 2
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                alert('您的答案已記錄，謝謝參與！');
-              })
-              .catch(error => {
-                alert('抱歉，記錄答案時出現問題。請稍後再試。');
-              });
     }
 
     function logCorrectAnswer() {
@@ -259,17 +252,6 @@
           number: 2
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                if (data.success) {
-                  alert(data.message);
-                } else {
-                  alert('恭喜答對');
-                }
-              })
-              .catch(error => {
-                alert('操作失敗，請稍後再試。');
-              });
     }
 
     // 生成圖片按鈕的事件處理
@@ -297,7 +279,6 @@
               .then(responses => responses.json())
               .then(data => {
                 if (data.success) {
-                  alert('圖片上傳成功！');
                   if (data.tryonImgUrl) {
                     imgElement.src = data.tryonImgUrl;
                   } else {

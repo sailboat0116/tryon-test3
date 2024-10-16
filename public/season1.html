@@ -44,9 +44,15 @@
       margin: 10px 0;
 
     }
-    .chat img {
+    .chat_rob {
       width: 50px;
       height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .chat_img {
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       margin-right: 10px;
     }
@@ -122,16 +128,16 @@
   </a>
   <!-- 機器人發送的圖片 -->
   <div class="chat">
-    <img src="images/profile-icon.png" alt="機器人頭像" />
-    <img src="uploads/season1-1.jpg">
-    <img src="uploads/season1-2.jpg">
-    <img src="uploads/season1-3.jpg">
-    <img src="uploads/season1-4.jpeg">
+    <img src="images/profile-icon.png" class="chat_rob" alt="機器人頭像" />
+    <img src="uploads/season1-1.jpg" class="chat_img">
+    <img src="uploads/season1-2.jpg" class="chat_img">
+    <img src="uploads/season1-3.jpg" class="chat_img">
+    <img src="uploads/season1-4.jpeg" class="chat_img">
   </div>
 
   <!-- 機器人發送的問題 -->
   <div class="chat">
-    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <img src="images/profile-icon.png" class="chat_rob" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <h3>請問適合秋冬的材質是下列哪一個？</h3>
     </div>
@@ -139,7 +145,7 @@
 
   <!-- 機器人發送的選項與確認按鈕 -->
   <div class="chat">
-    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <img src="images/profile-icon.png" class="chat_rob" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble">
       <div class="chat-options">
         <button class="option-button">雪紡紗</button>
@@ -154,7 +160,7 @@
 
   <!-- 機器人回應 -->
   <div class="chat" id="response-container" style="display:none;">
-    <img src="images/profile-icon.png" alt="機器人頭像" />
+    <img src="images/profile-icon.png" class="chat_rob" alt="機器人頭像" />
     <div class="chat-bubble bot-bubble" id="response-message">
       <!-- 回應會顯示在這裡 -->
     </div>
@@ -211,8 +217,6 @@
       }
     });
     function logWrongAnswer() {
-      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-      //const userId = getCurrentUserId(); // 您需要實現這個函數
 
       fetch('/api/wrong', {
         method: 'POST',
@@ -225,20 +229,9 @@
           number: 1
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                // 可以在這裡添加用戶反饋，例如：
-                alert('您的答案已記錄，謝謝參與！');
-              })
-              .catch(error => {
-                // 可以在這裡添加錯誤反饋，例如：
-                alert('抱歉，記錄答案時出現問題。請稍後再試。');
-              });
     }
 
     function logCorrectAnswer() {
-      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-      //const userId = getCurrentUserId(); // 您需要實現這個函數
 
       fetch('/api/correct', {
         method: 'POST',
@@ -251,21 +244,7 @@
           number: 1
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                if (data.success) {
-                  alert(data.message);  // 顯示刪除成功或其他訊息
-                } else {
-                  alert('恭喜答對');
-                }
-              })
-              .catch(error => {
-                console.error('操作時出錯:', error);
-                alert('操作失敗，請稍後再試。');
-              });
-
     }
-
   });
 </script>
 </body>

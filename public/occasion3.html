@@ -229,8 +229,6 @@
     });
 
     function logWrongAnswer() {
-      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-      //const userId = getCurrentUserId(); // 您需要實現這個函數
 
       fetch('/api/wrong', {
         method: 'POST',
@@ -243,20 +241,9 @@
           number: 3
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                // 可以在這裡添加用戶反饋，例如：
-                alert('您的答案已記錄，謝謝參與！');
-              })
-              .catch(error => {
-                // 可以在這裡添加錯誤反饋，例如：
-                alert('抱歉，記錄答案時出現問題。請稍後再試。');
-              });
     }
 
     function logCorrectAnswer() {
-      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-      //const userId = getCurrentUserId(); // 您需要實現這個函數
 
       fetch('/api/correct', {
         method: 'POST',
@@ -269,19 +256,6 @@
           number: 3
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                if (data.success) {
-                  alert(data.message);  // 顯示刪除成功或其他訊息
-                } else {
-                  alert('恭喜答對');
-                }
-              })
-              .catch(error => {
-                console.error('操作時出錯:', error);
-                alert('操作失敗，請稍後再試。');
-              });
-
     }
 
     // 生成圖片按鈕的事件處理
@@ -308,22 +282,6 @@
                   body: formData
                 });
               })
-              .then(responses => responses.json())
-              .then(data => {
-                if (data.success) {
-                  alert('圖片上傳成功！');
-                  if (data.tryonImgUrl) {
-                    imgElement.src = data.tryonImgUrl;
-                  } else {
-                    alert('未能獲取圖片 URL');
-                  }
-                } else {
-                  alert('圖片上傳失敗，請重試。');
-                }
-              })
-              .catch(error => {
-                alert('發生錯誤，請重試。');
-              });
     }
 
     function uploadImage2(fileName, imgElement) {
@@ -347,7 +305,6 @@
               .then(responses => responses.json())
               .then(data => {
                 if (data.success) {
-                  alert('圖片上傳成功！');
                   if (data.tryonImgUrl) {
                     imgElement.src = data.tryonImgUrl;
                   } else {

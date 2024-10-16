@@ -202,9 +202,6 @@
       }
     });
     function logWrongAnswer() {
-      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-      //const userId = getCurrentUserId(); // 您需要實現這個函數
-
       fetch('/api/wrong', {
         method: 'POST',
         headers: {
@@ -216,20 +213,9 @@
           number: 4
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                // 可以在這裡添加用戶反饋，例如：
-                alert('您的答案已記錄，謝謝參與！');
-              })
-              .catch(error => {
-                // 可以在這裡添加錯誤反饋，例如：
-                alert('抱歉，記錄答案時出現問題。請稍後再試。');
-              });
     }
 
     function logCorrectAnswer() {
-      // 假設我們有一個方法來獲取當前用戶的ID，如果沒有，可以傳null或空字符串
-      //const userId = getCurrentUserId(); // 您需要實現這個函數
 
       fetch('/api/correct', {
         method: 'POST',
@@ -242,19 +228,6 @@
           number: 4
         })
       })
-              .then(response => response.json())
-              .then(data => {
-                if (data.success) {
-                  alert(data.message);  // 顯示刪除成功或其他訊息
-                } else {
-                  alert('恭喜答對');
-                }
-              })
-              .catch(error => {
-                console.error('操作時出錯:', error);
-                alert('操作失敗，請稍後再試。');
-              });
-
     }
   });
 </script>
