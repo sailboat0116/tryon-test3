@@ -100,6 +100,39 @@
 </head>
 
 <script>
+  function uploadImage(fileName, imgElement, fileplace, save_filename) {
+    fetch(fileName)
+            .then(responses => responses.blob())
+            .then(blob => {
+              const formData = new FormData();
+              const category = "4";
+              formData.append('category', category);
+              formData.append('image', blob, fileName);
+              formData.append('fileplace', fileplace);
+              formData.append('save_filename', save_filename);
+
+              return fetch('http://localhost:3001/tryon', {
+                method: 'POST',
+                body: formData
+              });
+            })
+            .then(responses => responses.json())
+            .then(data => {
+              if (data.success) {
+                if (data.tryonImgUrl) {
+                  imgElement.src = data.tryonImgUrl;
+                } else {
+                  alert('未能獲取圖片 URL');
+                }
+              } else {
+                alert('圖片上傳失敗，請重試。');
+              }
+            })
+            .catch(error => {
+              alert('發生錯誤，請重試。');
+            });
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     // 從 localStorage 中讀取選擇的結果
     const selectedCategory = localStorage.getItem('selectedCategory');
@@ -108,6 +141,7 @@
 
     startButton.addEventListener('click', function(event) {
       if (selectedCategory === 'male') {
+        uploadImage('uploads/color_2b.jpg', '/public/tryon-image','public/color', 'color2b.jpg');
         window.location.href = '/color1b.html';
       } else if (selectedCategory === 'female') {
         window.location.href = '/color1.html';

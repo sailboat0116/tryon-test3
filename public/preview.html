@@ -69,11 +69,47 @@
         }
     </style>
     <script>
+        function uploadImage(fileName, imgElement, fileplace, save_filename) {
+            fetch(fileName)
+                .then(responses => responses.blob())
+                .then(blob => {
+                    const formData = new FormData();
+                    const category = "4";
+                    formData.append('category', category);
+                    formData.append('image', blob, fileName);
+                    formData.append('fileplace', fileplace);
+                    formData.append('save_filename', save_filename);
+
+                    return fetch('http://localhost:3001/tryon', {
+                        method: 'POST',
+                        body: formData
+                    });
+                })
+                .then(responses => responses.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.tryonImgUrl) {
+                            imgElement.src = data.tryonImgUrl;
+                        } else {
+                            alert('未能獲取圖片 URL');
+                        }
+                    } else {
+                        alert('圖片上傳失敗，請重試。');
+                    }
+                })
+                .catch(error => {
+                    alert('發生錯誤，請重試。');
+                });
+        }
+
         function handleDisagree() {
             window.location.href = 'example.html';
         }
 
         function handleAgree() {
+            uploadImage('uploads/color1b.jpg', '/public/tryon-image','public/color', 'color1b.jpg');
+            uploadImage('uploads/color_2b.jpg', '/public/tryon-image','public/color', 'color2b.jpg');
+            uploadImage('uploads/color_3b.jpg', '/public/tryon-image','public/color', 'color3b.jpg');
             window.location.href = 'category_selection.html';
         }
     </script>

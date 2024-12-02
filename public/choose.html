@@ -1,84 +1,84 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>首頁 - 穿搭開始</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      height: 100%;
-      background-image: url('images/choose_back.jpg');
-      background-size: cover;
-      background-position: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首頁 - 穿搭開始</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            background-image: url('images/choose_back.jpg');
+            background-size: cover;
+            background-position: center;
+        }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-    main {
-      flex-grow: 1;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
 
-    .button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40%;
-      height: 400px;
-      text-decoration: none;
-      position: relative;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: 0.9;
-      transition: opacity 0.3s ease, box-shadow 0.3s ease;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
+        .button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40%;
+            height: 400px;
+            text-decoration: none;
+            position: relative;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.9;
+            transition: opacity 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
 
-    .button:hover {
-      opacity: 0.7;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-    }
+        .button:hover {
+            opacity: 0.7;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
 
-    .button-text {
-      background-color: rgba(156, 148, 148, 0.62);
-      padding: 10px 20px;
-      color: black;
-      font-size: 2rem;
-      font-weight: bold;
-      border-radius: 5px;
-    }
+        .button-text {
+            background-color: rgba(156, 148, 148, 0.62);
+            padding: 10px 20px;
+            color: black;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 5px;
+        }
 
-    #test-button {
-      background-image: url('images/button_test.jpg');
-    }
+        #test-button {
+            background-image: url('images/button_test.jpg');
+        }
 
-    #chatbot-button {
-      background-image: url('images/robot.jpg');
-    }
-  </style>
+        #chatbot-button {
+            background-image: url('images/robot.jpg');
+        }
+    </style>
 </head>
 <body>
 <div class="container">
 
-      <main>
-      <div class="button-text">測驗</div>
-    <a href="example.html" class="button" id="test-button">
-    </a>
-    <a href="chatbot.html" class="button" id="chatbot-button">
-      <div class="button-text">穿搭小助理</div>
-    </a>
-  </main>
+    <main>
+        <a href="example.html" class="button" id="test-button">
+            <div class="button-text">測驗</div>
+        </a>
+        <a href="chatbot.html" class="button" id="chatbot-button">
+            <div class="button-text">穿搭小助理</div>
+        </a>
+    </main>
 
 </div>
 </body>
